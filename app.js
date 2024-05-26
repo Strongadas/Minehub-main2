@@ -54,12 +54,13 @@ const storage = multer.diskStorage({
 const upload = multer({ dest: 'uploads/' });
 
 //stripe api credentials
+/*
 const PUBLISHABLE_KEY = process.env.STRIPE_PUBLISH_KEY
 const SECRET_KEY = process.env.STRIPE_SECRET_KEY
 //const PUBLISHABLE_KEY = "pk_test_51Nv1LICzBZHxsYa2cLrtr1GvgwdeUBHbZU8zRyOyx0li7nnCod7zLOGxWnfKznCfSqsZRZ8kPyOycZMOafhzsdjV00I1GM2POK"
 //const SECRET_KEY = "sk_test_51Nv1LICzBZHxsYa2sTmO3PAdIV3I1CZGezIwpS3BM3aXGZoeZKdPmgHLksQvXpKeZ0VBMC6Af4lMK4qHI8zkm1TO00pavdmEyM"
 const stripe  = require('stripe')(SECRET_KEY)
-
+*/
 
 const app = express()
 
@@ -1134,7 +1135,9 @@ app.post('/bitcoin', ensureAuthenticated, (req, res) => {
   });
 
 
-  //stripe payment
+//stripe payment
+
+/*
 let due;
 let amountInCents;
 app.post('/visa',ensureAuthenticated,(req,res)=>{
@@ -1350,6 +1353,7 @@ app.get('/visa', ensureAuthenticated, async(req, res) => {
         });
     });
 });
+*/
 
 // POST route to handle form submission and update user settings
 app.post('/update-settings', async (req, res) => {
