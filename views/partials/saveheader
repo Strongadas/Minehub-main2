@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="cryptomus" content="333bd703" />
+    <title>MINEHUB</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="d-flex toggled" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            <div class="sidebar-logo">
+                <img src="/images/logo.png" alt="Logo">
+                
+            </div>
+           <hr>
+            <div class="list-group list-group-flush">
+                <a href="/dash" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-chart-line mr-2"></i>Dashboard
+                </a>
+                <a href="/buy-contracts" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-shopping-cart mr-2"></i> Buy Contracts
+                </a>
+                <a href="referral/<%= user._id %>" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-file-contract mr-2"></i> Referral
+                </a>
+                <a href="/withdraw" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-money-bill-wave mr-2"></i> Withdraw
+                </a>
+               
+                <a href="transactions" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-exchange-alt mr-2"></i>Transactions
+                </a>
+
+                <a href="/support" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-envelope mr-2"></i>Support
+                </a>
+
+                <a href="/settings" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-cogs text-white mr-2"></i>Settings
+                </a>
+
+                <a href="/logout" class="list-group-item list-group-item-action text-light bg-dark">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Log out
+                </a>
+                
+                
+                <!-- Add more sidebar links as needed -->
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+          <!-- Page Content -->
+          <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <button class="btn btn-primary" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="d-flex align-items-center ml-auto">
+                   <a href="/settings">
+                    <img src="/images/user.png" alt="" width="40" height="40" id="user-img">
+                   </a>
+                    <p class="mb-0 ml-2"><%= user.name %></p>
+                </div>
+            </nav>
+            

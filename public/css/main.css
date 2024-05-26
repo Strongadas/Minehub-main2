@@ -1,0 +1,169 @@
+
+      
+      
+/* Add your custom styles here */
+/* Example styles for the dashboard elements */
+body {
+    overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+min-height: 100vh;
+background-color: #d6f923;
+color: #fff;
+border-right: 1px solid #d70000;
+transition: all 0.3s;
+position: fixed;
+width: 250px;
+z-index: 1;
+left: 0;
+overflow-y: auto; /* Added overflow-y to enable vertical scrolling */
+max-height: 100vh; /* Set a maximum height for the sidebar */
+}
+
+
+.sidebar-heading {
+    padding: 1rem 1.5rem;
+    font-size: 1.5rem;
+    color: #fed136;
+}
+
+.list-group-item {
+    background-color: #343a40;
+    border-color: #444;
+}
+
+.list-group-item:hover {
+    background-color: #555;
+}
+
+
+
+.sidebar-logo img {
+    width: 99%;
+    height: 25%;
+}
+
+/* Rest of the styles remain the same */
+.mining-stats {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.dashboard-icons i {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.dashboard-icons .icon-label {
+    font-size: 18px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    padding-left: 250px;
+    transition: all 0.3s;
+}
+
+.toggled #sidebar-wrapper {
+    left: -250px;
+}
+
+.toggled #page-content-wrapper {
+    width: 100%;
+    padding-left: 0;
+}
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #333, #ccc, #333);
+    margin: 20px 0;
+}
+.transactions-container {
+    margin-top: 20px;
+}
+
+.transaction-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+}
+
+.transaction-item .transaction-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.transaction-item .transaction-details {
+    display: flex;
+    align-items: center;
+}
+
+.transaction-item .transaction-amount {
+    font-weight: bold;
+}
+
+.transaction-item .transaction-date {
+    margin-left: auto;
+    color: #888;
+}
+.setting-item {
+    background-color: #f0f0f0; /* New background color */
+    border-bottom: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.setting-item:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+
+.setting-item i {
+    margin-right: 10px;
+}
+
+/* Adjust input width */
+.setting-input {
+    flex-grow: 1;
+    margin-left: auto;
+    width: 100%;
+}
+/* Style to display elements inline */
+.inline-value span,
+.inline-value img {
+    display: inline;
+}
+
+
+
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        left: -250px;
+    }
+
+    .toggled #sidebar-wrapper {
+        left: -250px;
+    }
+
+    .toggled #page-content-wrapper {
+        width: 100%;
+        padding-left: 0;
+    }
+    #page-content-wrapper {
+        width: calc(100% - 250px);
+        padding-left: 250px;
+        transition: all 0.3s;
+    }
+    #user-img{
+        width: 30px;
+        height: 30px;
+    }
+}
+

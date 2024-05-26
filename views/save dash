@@ -1,0 +1,59 @@
+<%- include('partials/header-user') %>
+
+<div class="container-fluid">
+    <h1 class="mt-4">Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="mining-stats text-center">
+                <div class="dashboard-icons">
+                    <i class="fas fa-coins text-warning"></i>
+                    <div class="icon-label"> Current Balance</div>
+                </div>
+                <h2 class="inline-value">
+                    <span><img src="/images/coin-1.svg" width="24" height="27" alt="bitcoin logo"></span>
+                    <%= updatedBalance %>
+                </h2>
+                <label class="text-muted">please note ! The AI mines every 10min</label>
+                <a href="/withdraw" class="btn btn-success">Withdraw</a>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="mining-stats text-center">
+                <div class="dashboard-icons">
+                    <i class="fas fa-chart-line text-success"></i>
+                    <div class="icon-label"> <span class="text-warning">1 BTC </span> - Bitcoin Price</div>
+                </div>
+                <!-- Include the content from the trend-card here -->
+                <div class="trend-card">
+                    <div class="card-title-wrapper">
+                        <img src="/images/coin-1.svg" width="24" height="24" alt="bitcoin logo">
+                        <a href="#" class="card-title">Bitcoin <span class="span">BTC/USD</span></a>
+                    </div>
+                    <% if (cryptoData && cryptoData.USD) { %>
+                    <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD %></data>
+                    <% } else { %>
+                    <p>No USD value available for Bitcoin</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="mining-stats text-center">
+                <div class="dashboard-icons">
+                    <i class="fas fa-cogs text-primary"></i>
+                    <div class="icon-label">Active <% user.hashRates.forEach(rate => { %>
+                        <strong>Hash Rate:</strong> <%= rate.hashRate %>
+                        <% }); %></div>
+                </div>
+                <ul>
+                    <!-- Content for active hash rates -->
+                </ul>
+                <a href="/buy-contracts" class="btn btn-primary">Buy Hashrate</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('transaction') %>
+
+<%- include('partials/footer-user') %>

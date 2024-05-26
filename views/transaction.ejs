@@ -1,0 +1,31 @@
+<div class="container transactions-container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Recent Transactions</h2>
+        <a href="/transactions" style="text-align: end;">View all</a>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="highlight">
+                        <th scope="col">#</th>
+                        <th scope="col">Code</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recentTransactions.forEach((transaction, index) => { %>
+                        <tr>
+                            <th scope="row"><%= index + 1 %></th>
+                            <td <% if (transaction.description === 'Withdraw') { %>style="color: green;"<% } else { %>style="color: red;"<% } %>><%= transaction.description %></td>
+                            <td><%= transaction.amount %></td>
+                            <td><%= transaction.timestamp.toISOString().split('T')[0] %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

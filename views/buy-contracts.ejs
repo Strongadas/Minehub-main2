@@ -1,0 +1,229 @@
+<%- include('partials/header-user') %>
+<style>
+  result-container {
+      border: 1px solid #ccc;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .result-text {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .result-text span {
+      display: block;
+      margin-bottom: 10px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title text-center">Buy Hashrate</h2>
+            <form id="buyHashrateForm" method="post">
+              <div class="form-group">
+                <p class="text-muted">TH1 = $12</p>
+                <label for="hashrateAmount">Hashrate Amount</label>
+              
+                <input type="number" step="any" class="form-control" id="hashrateAmount" name="hashrateAmount" placeholder="Enter Hashrate Amount"  required>
+                <small class="text-danger" id="hashrateError" style="display: none;">Limit exceeded (max 500)</small>
+                <small class="text-danger" id="hashrateError2" style="display: none;">Please enter a hash amount</small>
+              </div>
+              <div class="form-group">
+               
+
+                <label for="paymentMethod">Select Payment Method</label>
+                <select class="form-control" id="paymentMethod" name="paymentMethod">
+                  <option value="creditCard">Credit Card</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="crypto">BITCOIN</option>
+                  <option value="usdt">USDT</option>
+                </select>
+
+                <label for="hashrateAmount"> Amount $</label>      
+                <input type="number" step="any" class="form-control" id="amount" name="amount" placeholder="Amount to pay" readonly>
+
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Buy Hashrate</button>
+              </div>
+            </form>
+            <hr>
+            <div class="text-center">
+              <h4>Accepted Payment Methods</h4>
+              <img src="/images/visa.png" alt="Credit Card" class="img-fluid mx-2" style="max-width: 100px;">
+              <img src="/images/coin-1.svg" alt="PayPal" class="img-fluid mx-2" style="max-width: 50px;">
+              <img src="/images/paypal.png" alt="Crypto" class="img-fluid mx-2" style="max-width: 50px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<br>
+<br> <br> <br>
+
+
+<div class="container-sm">
+  <h1 class="text-center mb-2">Cloud Mining Calculator</h1>
+  <div class="text-center mb-2">
+    <label for="inputType">Calculate by Hash or USD:</label>
+    <select id="inputType" onchange="toggleInput()" class="form-control mb-1">
+      <option value="hashRate">Hash Rate (1 Hash = $12)</option>
+      <option value="usdAmount">USD Amount</option>
+    </select>
+    <div id="hashRateInput">
+      <label for="hashRate">Enter Hash Rate:</label>
+      <input type="number" id="hashRate" step="1" min="1" max="1000" placeholder="Hash rate (min 1, max 1000)" class="form-control mb-1">
+      <div id="hashRateError" class="error text-danger" style="display: none;">Hash rate must be between 1TH to 1000TH.</div>
+    </div>
+    <div id="usdAmountInput" style="display: none;">
+      <label for="usdAmount">Enter USD Amount:</label>
+      <input type="number" id="usdAmount" step="0.01" min="12" max="12000" placeholder="USD amount (min $12, max $12000)" class="form-control mb-1">
+      <div id="usdAmountError" class="error text-danger" style="display: none;">USD amount must be between $12 to $12000.</div>
+    </div>
+    <div id="resultContainer" style="display: none;">
+      <div id="resultText" class="font-weight-bold"></div>
+    </div>
+    <button onclick="calculateInterest()" class="btn btn-primary mt-2">Calculate</button>
+  </div>
+</div>
+
+
+  <script>
+    function calculatePrice() {
+      const hashrateAmount = parseFloat(document.getElementById('hashrateAmount').value);
+      let price = 0;
+      let errorMessage = document.getElementById('hashrateError');
+      let errorMessage2 = document.getElementById('hashrateError2');
+
+      if (hashrateAmount >= 1 && hashrateAmount <= 1000) {
+        price = hashrateAmount * 12;
+        errorMessage.style.display = 'none';
+      } else if (hashrateAmount === "") {
+        event.preventDefault();
+        errorMessage2.style.display = "block";
+      } else {
+        price = 0;
+        errorMessage.style.display = 'block';
+      }
+
+      document.getElementById('amount').value = price;
+    }
+
+    document.getElementById('hashrateAmount').addEventListener('change', calculatePrice);
+    document.getElementById('hashrateAmount').addEventListener('input', calculatePrice);
+
+    document.getElementById('buyHashrateForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const paymentMethod = document.getElementById('paymentMethod').value;
+      const form = document.getElementById('buyHashrateForm');
+
+      if (paymentMethod === 'creditCard') {
+        form.action = '/visa';
+        form.method = "post"
+      } else if (paymentMethod === 'paypal') {
+        form.action = '/paypalRoute';
+        form.method = "post"
+      } else if (paymentMethod === 'crypto') {
+        form.action = '/bitcoin';
+        form.method = "post"
+      }
+      else if (paymentMethod === 'usdt') {
+        form.action = '/usdt';
+        form.method = "post"
+      }
+
+      form.submit();
+    });
+
+
+   
+      function toggleInput() {
+        const inputType = document.getElementById("inputType").value;
+        const hashRateInput = document.getElementById("hashRateInput");
+        const usdAmountInput = document.getElementById("usdAmountInput");
+  
+        if (inputType === "hashRate") {
+          hashRateInput.style.display = "block";
+          usdAmountInput.style.display = "none";
+        } else {
+          hashRateInput.style.display = "none";
+          usdAmountInput.style.display = "block";
+        }
+      }
+  
+      function calculateInterest() {
+        const inputType = document.getElementById("inputType").value;
+  
+        if (inputType === "hashRate") {
+          const hashRate = parseInt(document.getElementById("hashRate").value);
+          if (hashRate < 1 || hashRate > 1000) {
+            document.getElementById("hashRateError").style.display = "block";
+            document.getElementById("usdAmountError").style.display = "none";
+            return;
+          } else {
+            document.getElementById("hashRateError").style.display = "none";
+          }
+        } else {
+          const usdAmount = parseFloat(document.getElementById("usdAmount").value);
+          if (usdAmount < 12 || usdAmount > 12000) {
+            document.getElementById("usdAmountError").style.display = "block";
+            document.getElementById("hashRateError").style.display = "none";
+            document.getElementById("resultContainer").style.display = "none";
+            return;
+          } else {
+            document.getElementById("usdAmountError").style.display = "none";
+          }
+        }
+  
+        // Calculate interest and display result
+        let usdAmount;
+        if (inputType === "hashRate") {
+          const hashRate = parseInt(document.getElementById("hashRate").value);
+          usdAmount = hashRate * 12;
+        } else {
+          usdAmount = parseFloat(document.getElementById("usdAmount").value);
+        }
+  
+        const dailyInterest = usdAmount * 0.025;
+        const weeklyInterest = dailyInterest * 7;
+        const monthlyInterest = dailyInterest * 30;
+
+        const resultText = `
+        <span>With an investment of $${usdAmount.toFixed(2)},</span>
+        <span>the potential daily yield at 2.5% is $${dailyInterest.toFixed(2)},</span>
+        <span>the estimated weekly return could reach $${weeklyInterest.toFixed(2)},</span>
+        <span>and the monthly return might be around $${monthlyInterest.toFixed(2)}.</span>
+        <span style="color: green;">This contract has a duration of one year.</span>
+        `;
+
+
+  
+        document.getElementById("resultText").innerHTML = resultText;
+        document.getElementById("resultContainer").style.display = "block";
+      }
+    
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('partials/footer-user') %>

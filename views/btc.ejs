@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>USDT Payment Address</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">BTC Payment Address</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Address:</strong> 19fM2WZExQwmMtPGUxdyKRW13BBAwAwN1x </p>
+        <p><strong>Amount:</strong> $<%= amount %></p>
+        <p><strong>Network:</strong> BITCOIN</p>
+
+        <center><img src="/images/btcqrcode.jpg" alt="" width="250px" height="250px"></center>
+
+        <br><br>
+       
+        <label class="text-muted">It may take up to 24 hours or less due to the blockchain, mostly 30 min. Feel free to contact our team.</label>
+
+       
+        <div id="proofSubmissionForm">
+          <!-- Form for submitting proof of payment -->
+          <form action="/submitProof" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="proof">Proof of Payment:</label>
+              <input type="file" class="form-control-file" id="proof" name="proof" accept="image/*">
+              <small id="proofHelp" class="form-text text-muted">Upload an image of your payment proof.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="text">Additional Information:</label>
+              <input type="text" class="form-control" id="text" name="text">
+              <small id="textHelp" class="form-text text-muted">Enter any additional information.</small>
+            </div>
+            
+            <button type="submit" class="btn btn-success">Submit</button>
+          </form>
+        </div>
+
+        
+      </div>
+
+    </div> <br>
+    <div class="text-center">
+      <a href="/dash" class="btn btn-primary">Go to Dashboard</a>
+    </div>
+  </div>
+
+  
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/umd/qrcode.js"></script>
+  
+</body>
+</html>

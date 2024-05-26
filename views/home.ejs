@@ -1,0 +1,718 @@
+<%- include('partials/header') %>
+
+
+<div id="home">
+
+    <article>
+
+        <!-- 
+          - #HERO
+          
+        -->
+  
+        <section class="section hero" aria-label="hero" data-section>
+          <div class="container">
+  
+            <div class="hero-content">
+  
+              <h1 class="h1 hero-title">Cloud Mining</h1>
+              <h3 class="h3 hero-title">Up to 2.5% Dialy</h3>
+              <p class="hero-text">
+                MINEHUB is the easiest, safest, and fastest way to mine bitcoin in <%= new Date().getFullYear() %> .
+              </p>
+  
+              <a href="/register" class="btn btn-primary">Get started now</a>
+  
+            </div>
+  
+            <figure class="hero-banner">
+              
+              <img src="/images/home-logo.png" width="600" height="600" alt="hero banner" class="w-100">
+            </figure>
+  
+          </div>
+        </section>
+  
+  
+  
+  
+  
+        <!-- 
+          - #TREND
+        -->
+  
+        <section class="section trend" aria-label="crypto trend" data-section id="market">
+          <div class="container">
+            <div class="trend-tab">
+              <ul class="tab-nav">
+                <li>
+                  <button class="tab-btn active">Crypto</button>
+                </li>
+              </ul>
+              <ul class="tab-content">
+                <li>
+                  <div class="trend-card">
+                    <div class="card-title-wrapper">
+                      <img src="/images/coin-1.svg" width="24" height="24" alt="bitcoin logo">
+                      <a href="#" class="card-title">Bitcoin <span class="span">BTC/USD</span></a>
+                    </div>
+                    <% if (cryptoData && cryptoData.USD) { %>
+                      <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD %></data>
+                      <div class="card-analytics">
+                        <data class="current-price" value="<%= cryptoData.USD %>"><%= cryptoData.USD %></data>
+                      </div>
+                    <% } else { %>
+                      <p>No USD value available for Bitcoin</p>
+                    <% } %>
+                  </div>
+                </li>
+                <!-- Add similar sections for other cryptocurrencies if needed -->
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+  
+  
+  
+  
+        <!-- 
+          - #MARKET
+        -->
+  
+        <section class="section market" aria-label="market update" data-section >
+          <div class="container" style="display: none;">
+  
+            <div class="title-wrapper">
+              <h2 class="h2 section-title">Market Update</h2>
+  
+              <a href="#" class="btn-link">See All Coins</a>
+            </div>
+  
+            <div class="market-tab">
+  
+              <ul class="tab-nav">
+  
+                <li>
+                  <button class="tab-btn active">View All</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">Metaverse</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">Entertainment</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">Energy</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">NFT</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">Gaming</button>
+                </li>
+  
+                <li>
+                  <button class="tab-btn">Music</button>
+                </li>
+  
+              </ul>
+  
+              <table class="market-table">
+  
+                <thead class="table-head">
+  
+                  <tr class="table-row table-title">
+  
+                    <th class="table-heading"></th>
+  
+                    <th class="table-heading" scope="col">#</th>
+  
+                    <th class="table-heading" scope="col">Name</th>
+  
+                    <th class="table-heading" scope="col">Last Price</th>
+  
+                    <th class="table-heading" scope="col">24h %</th>
+  
+                    <th class="table-heading" scope="col">Market Cap</th>
+  
+                    <th class="table-heading" scope="col">Last 7 Days</th>
+  
+                    <th class="table-heading"></th>
+  
+                  </tr>
+  
+                </thead>
+  
+                <tbody class="table-body">
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">1</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-1.svg" width="20" height="20" alt="Bitcoin logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Bitcoin <span class="span">BTC</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update green">+1.45%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-1.svg" width="100" height="40" alt="profit chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">2</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-2.svg" width="20" height="20" alt="Ethereum logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Ethereum <span class="span">ETH</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update red">-5.12%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-2.svg" width="100" height="40" alt="loss chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">3</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-3.svg" width="20" height="20" alt="Tether logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Tether <span class="span">USDT/USD</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update green">+1.45%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-1.svg" width="100" height="40" alt="profit chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">4</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-4.svg" width="20" height="20" alt="BNB logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">BNB <span class="span">BNB/USD</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update red">-3.75%%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-2.svg" width="100" height="40" alt="loss chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">5</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-5.svg" width="20" height="20" alt="Solana logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Solana <span class="span">SOL</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update green">+1.45%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-1.svg" width="100" height="40" alt="profit chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">6</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-6.svg" width="20" height="20" alt="XRP logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">XRP <span class="span">XRP</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update red">-2.22%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-2.svg" width="100" height="40" alt="loss chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">7</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-7.svg" width="20" height="20" alt="Cardano logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Cardano <span class="span">ADA</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update green">+0.8%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-1.svg" width="100" height="40" alt="profit chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                  <tr class="table-row">
+  
+                    <td class="table-data">
+                      <button class="add-to-fav" aria-label="Add to favourite" data-add-to-fav>
+                        <ion-icon name="star-outline" aria-hidden="true" class="icon-outline"></ion-icon>
+                        <ion-icon name="star" aria-hidden="true" class="icon-fill"></ion-icon>
+                      </button>
+                    </td>
+  
+                    <th class="table-data rank" scope="row">8</th>
+  
+                    <td class="table-data">
+                      <div class="wrapper">
+                        <img src="./assets/images/coin-8.svg" width="20" height="20" alt="Avalanche logo" class="img">
+  
+                        <h3>
+                          <a href="#" class="coin-name">Avalanche <span class="span">AVAX</span></a>
+                        </h3>
+                      </div>
+                    </td>
+  
+                    <td class="table-data last-price">$56,623.54</td>
+  
+                    <td class="table-data last-update green">+1.41%</td>
+  
+                    <td class="table-data market-cap">$880,423,640,582</td>
+  
+                    <td class="table-data">
+                      <img src="./assets/images/chart-1.svg" width="100" height="40" alt="profit chart" class="chart">
+                    </td>
+  
+                    <td class="table-data">
+                      <button class="btn btn-outline">Trade</button>
+                    </td>
+  
+                  </tr>
+  
+                </tbody>
+  
+              </table>
+  
+            </div>
+  
+          </div>
+        </section>
+  
+  
+  
+  
+  
+        <!-- 
+          - #INSTRUCTION
+        -->
+  
+        <section class="section instruction" aria-label="instruction" data-section>
+          <div class="container">
+  
+            <h2 class="h2 section-title">How It Works</h2>
+  
+            <p class="section-text">
+              Our Team has made it easier and safest to help you Mining Bitcoin using your browser.
+            </p>
+  
+            <ul class="instruction-list">
+  
+              <li>
+                <div class="instruction-card">
+  
+                  <figure class="card-banner">
+                    <img src="/images/instruction-1.png" width="96" height="96" loading="lazy" alt="Step 1"
+                      class="img">
+                  </figure>
+  
+                  <p class="card-subtitle">Step 1</p>
+  
+                  <h3 class="h3 card-title">Register</h3>
+  
+                  <p class="card-text">
+                    Click <a href="">Get Started</a> and register on our Cloud Mining.
+                  </p>
+  
+                </div>
+              </li>
+  
+              <li>
+                <div class="instruction-card">
+  
+                  <figure class="card-banner">
+                    <img src="/images/instruction-2.png" width="96" height="96" loading="lazy" alt="Step 2"
+                      class="img">
+                  </figure>
+  
+                  <p class="card-subtitle">Step 2</p>
+  
+                  <h3 class="h3 card-title">Buy Contracts</h3>
+  
+                  <p class="card-text">
+                    Navigate to the Contracts/Buy section and Select the desired contract you wish to purchase.
+                  </p>
+  
+                </div>
+              </li>
+  
+              <li>
+                <div class="instruction-card">
+  
+                  <figure class="card-banner">
+                    <img src="/images/instruction-3.png" width="96" height="96" loading="lazy" alt="Step 3"
+                      class="img">
+                  </figure>
+  
+                  <p class="card-subtitle">Step 3</p>
+  
+                  <h3 class="h3 card-title">Start Mining</h3>
+  
+                  <p class="card-text">
+                   After buying the contrats, it will auto start mining your bitcoin.
+                  </p>
+  
+                </div>
+              </li>
+  
+              <li>
+                <div class="instruction-card">
+  
+                  <figure class="card-banner">
+                    <img src="/images/instruction-4.png" width="96" height="96" loading="lazy" alt="Step 4"
+                      class="img">
+                  </figure>
+  
+                  <p class="card-subtitle">Step 4</p>
+  
+                  <h3 class="h3 card-title">Withdraw Money</h3>
+  
+                  <p class="card-text">
+                   After you reach the out amount of $3 , you can Withdraw every 12hours, all Withdraw are instant.
+                  </p>
+  
+                </div>
+              </li>
+  
+            </ul>
+  
+          </div>
+        </section>
+  
+  
+  
+  
+  
+        <!-- 
+          - #ABOUT
+        -->
+  
+        <section class="section about" aria-label="about" data-section id="about">
+          <div class="container">
+  
+            <figure class="about-banner">
+              <img src="/images/logo.png" width="748" height="436" loading="lazy" alt="about banner"
+                class="w-100">
+            </figure>
+  
+            <div class="about-content">
+  
+              <h2 class="h2 section-title">What Is MINEHUB?</h2>
+  
+              <p class="section-text">
+                MineHub is an innovative platform that facilitates Bitcoin cloud mining, offering individuals the opportunity to engage in cryptocurrency mining without the need for extensive technical knowledge or complex hardware setups.
+              </p>
+  
+              <ul class="section-list">
+  
+                <li class="section-item">
+                  <div class="title-wrapper">
+                    <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
+  
+                    <h3 class="h3 list-title">Mine Real Bitcoin</h3>
+                  </div>
+  
+                  <p class="item-text">
+                    The platform provides a user-friendly interface, allowing individuals to sign up, select from various mining plans, and begin their mining journey promptly. Users can access real-time data analytics to monitor their mining performance and track the growth of their mining portfolio
+                  </p>
+                </li>
+  
+                <li class="section-item">
+                  <div class="title-wrapper">
+                    <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
+  
+                    <h3 class="h3 list-title">Instant Withdraw</h3>
+                  </div>
+  
+                  <p class="item-text">
+                    Say goodbye to lengthy waiting times. With MineHub's Instant Withdrawal, your earnings are available to you immediately upon request.
+                  </p>
+                </li>
+  
+              </ul>
+  
+              <a href="/register" class="btn btn-primary">Explore More</a>
+  
+            </div>
+  
+          </div>
+        </section>
+  
+  
+  
+  
+  
+        <!-- 
+          - #APP
+        -->
+  
+        <section class="section app" aria-label="app" data-section style="display: none;">
+          <div class="container">
+  
+            <div class="app-content">
+  
+              <h2 class="h2 section-title">Free Your Money & Invest With Confident</h2>
+  
+              <p class="section-text">
+                With Cryptor Trade, you can be sure your trading skills are matched
+              </p>
+  
+              <ul class="section-list">
+  
+                <li class="section-item">
+                  <div class="title-wrapper">
+                    <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
+  
+                    <h3 class="h3 item-title">Buy, Sell, And Trade On The Go</h3>
+                  </div>
+  
+                  <p class="item-text">
+                    Manage Your Holdings From Your Mobile Decive
+                  </p>
+                </li>
+  
+                <li class="section-item">
+                  <div class="title-wrapper">
+                    <ion-icon name="checkmark-circle" aria-hidden="true"></ion-icon>
+  
+                    <h3 class="h3 item-title">Take Control Of Your Wealth</h3>
+                  </div>
+  
+                  <p class="item-text">
+                    Rest Assured You (And Only You) Have Access To Your Funds
+                  </p>
+                </li>
+  
+              </ul>
+  
+              <div class="app-wrapper">
+                <a href="#">
+                  <img src="./assets/images/googleplay.png" width="135" height="40" loading="lazy"
+                    alt="get it on google play">
+                </a>
+  
+                <a href="#">
+                  <img src="./assets/images/appstore.png" width="120" height="40" loading="lazy"
+                    alt="download on the app store">
+                </a>
+              </div>
+  
+            </div>
+  
+            <div class="app-banner">
+              <img src="./assets/images/app-banner.png" width="618" height="526" loading="lazy" alt="app banner"
+                class="w-100">
+  
+              <span class="span">Scan To Download</span>
+            </div>
+  
+          </div>
+        </section>
+  
+      </article>
+    </main>
+  
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('partials/footer') %>

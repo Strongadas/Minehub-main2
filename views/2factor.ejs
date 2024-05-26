@@ -1,0 +1,21 @@
+<%- include('partials/header-user') %>
+
+<form action="/verify" method="post">
+    <div class="setting-item">
+        <i class="fas fa-lock"></i>
+        <span>2FA Verification </span>
+        <input type="text" class="form-control setting-input" name="twoFactorAuthSecret">
+    </div>
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">Verify</button>
+    </div>
+
+
+</form>
+
+
+
+
+
+
+<%- include('partials/footer-user') %>

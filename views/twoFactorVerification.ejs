@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <title>Verify</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .verification-form {
+            background-color: #fff;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .setting-item {
+            margin-bottom: 20px;
+        }
+        .setting-item i {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-right: 10px;
+        }
+        .setting-item span {
+            font-size: 20px;
+        }
+        .setting-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-success {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #45a049;
+        }
+        .verification-message {
+            display: block;
+            font-size: 16px;
+            color: #888;
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-form">
+        <form action="/verifytologin" method="post">
+            <div class="setting-item text-center">
+                <i class="fas fa-lock"></i>
+                <span>2FA Verification</span>
+            </div>
+            <label for="verification" class="verification-message">The verification code has been sent to your email.</label>
+            <div class="setting-item">
+                <input type="text" class="form-control setting-input" placeholder="Enter Verification Code" name="twoFactorAuthSecret" required>
+            </div>
+           
+            <div class="setting-item">
+                <button type="submit" class="btn btn-success">Verify</button>
+            </div>
+          
+        </form>
+    </div>
+</body>
+</html>
