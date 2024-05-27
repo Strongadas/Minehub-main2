@@ -1,81 +1,84 @@
 <%- include('partials/header-user') %>
 
-<form action="/update-settings" method="POST">
-    <div class="container mt-4">
-        <% if (successMessage) { %>
-            <div class="alert alert-success" role="alert">
-                <%= successMessage %>
-            </div>
-            <script>
-                // Redirect after displaying the message (optional)
-                setTimeout(function() {
-                    window.location.href = '/settings'; // Redirect to settings page after 3 seconds
-                }, 3000); // Change the delay time in milliseconds (here it's set to 3 seconds)
-            </script>
-        <% } %>
-
-        <h1 class="text-center mb-4">Settings</h1>
-
-        <div class="row">
-            <div class="col-md-6 mx-auto">
-                <div class="setting-item">
-                    <i class="fas fa-user-cog"></i>
-                    <span>Name </span>
-                    <input type="text" class="form-control setting-input" value="<%= user.name %>" name="name">
+<div class="container mt-4 bg-light">
+    <form action="/update-settings" method="POST">
+        <div class="container mt-4">
+            <% if (successMessage) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= successMessage %>
                 </div>
-              
-                <input type="hidden" name="notification" value="<%= user.notification %>">
-                <div class="setting-item">
-                    <i class="fas fa-bell"></i>
-                    <span>Email Notification </span>
-                    <div class="custom-control custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="2faSwitch" <% if (user.notification) { %>checked<% } else { %>false<% } %> name="notification">
-                        <label class="custom-control-label" for="2faSwitch"></label>
+                <script>
+                    // Redirect after displaying the message (optional)
+                    setTimeout(function() {
+                        window.location.href = '/settings'; // Redirect to settings page after 3 seconds
+                    }, 3000); // Change the delay time in milliseconds (here it's set to 3 seconds)
+                </script>
+            <% } %>
+
+            <h1 class="text-center mb-4">Settings</h1>
+
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="setting-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Name </span>
+                        <input type="text" class="form-control setting-input" value="<%= user.name %>" name="name">
                     </div>
-                </div>
-                    
-               
-                
-                <div class="setting-item">
-                    <i class="fas fa-money-bill-wave"></i>
-                    <span>Wishlisted Address</span>
-                    <% if (user.wishlistedAddress) { %>
-                        <input type="text" class="form-control setting-input" value="<%- user.wishlistedAddress %>" name="wishlistedAddress" readonly> <br>
-                        
-                    <% } else { %>
-                        <input type="text" class="form-control setting-input" placeholder="Add Your Wishlisted Address..." value="" name="wishlistedAddress">
-                    <% } %>
-                </div>
-                <label  class="text-muted text-center">
-                    If you need to change the wishlistedAddress please
-                    <a href="https://t.me/minehuboffical" target="_blank">contact us</a>
-                   
-                </label>
-               
-              
-                <div class="setting-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>Email Address</span>
-                    <input type="email" class="form-control setting-input" value="<%= user.username %>" name="username">
-                </div>
 
-                <div class="setting-item">
-                    <i class="fas fa-lock"></i>
-                    <span>Two-Factor Authentication</span>
-                    <div class="custom-control custom-switch ml-auto">
-                        <input type="checkbox" class="custom-control-input" id="1faSwitch" <% if (user.twoFactorAuthEnabled) { %>checked<% } %> name='Authentication' >
-                        <label class="custom-control-label" for="1faSwitch"></label>
+                    <input type="hidden" name="notification" value="<%= user.notification %>">
+                    <div class="setting-item">
+                        <i class="fas fa-bell"></i>
+                        <span>Email Notification </span>
+                        <div class="custom-control custom-switch ml-auto">
+                            <input type="checkbox" class="custom-control-input" id="2faSwitch" <% if (user.notification) { %>checked<% } else { %>false<% } %> name="notification">
+                            <label class="custom-control-label" for="2faSwitch"></label>
+                        </div>
                     </div>
-                    <!-- Anchor tag to navigate to the specified route -->
-                    <a href="/2fa-verification/<%= user.twoFactorAuthEnabled %>" id="2faSubmitBtn" style="display: none;"></a>
+
+                    <div class="setting-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Wishlisted Address</span>
+                        <% if (user.wishlistedAddress) { %>
+                            <input type="text" class="form-control setting-input" value="<%- user.wishlistedAddress %>" name="wishlistedAddress" readonly> <br>
+                        <% } else { %>
+                            <input type="text" class="form-control setting-input" placeholder="Add Your Wishlisted Address..." value="" name="wishlistedAddress">
+                        <% } %>
+                    </div>
+                    <label  class="text-muted text-center">
+                        If you need to change the wishlistedAddress please
+                        <a href="https://t.me/minehuboffical" target="_blank">contact us</a>
+                    </label>
+
+                    <div class="setting-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email Address</span>
+                        <input type="email" class="form-control setting-input" value="<%= user.username %>" name="username">
+                    </div>
+
+                    <div class="setting-item">
+                        <i class="fas fa-lock"></i>
+                        <span>Two-Factor Authentication</span>
+                        <div class="custom-control custom-switch ml-auto">
+                            <input type="checkbox" class="custom-control-input" id="1faSwitch" <% if (user.twoFactorAuthEnabled) { %>checked<% } %> name='Authentication' >
+                            <label class="custom-control-label" for="1faSwitch"></label>
+                        </div>
+                        <!-- Anchor tag to navigate to the specified route -->
+                        <a href="/2fa-verification/<%= user.twoFactorAuthEnabled %>" id="2faSubmitBtn" style="display: none;"></a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="text-center mt-4">
-        <button type="submit" class="btn btn-success">Save Changes</button>
-    </div>
-</form>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

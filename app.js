@@ -1397,7 +1397,7 @@ app.post('/send-support-email', async (req, res) => {
       console.log('Message:', message);
 
       transporter.sendMail({
-        to:"strongadas009@gmail.com",
+        to:"hello.minehub@gmail.com",
         subject: 'A user wanna get in touch with you',
         text: `Hello team ${email} , said ${message}.`,
       });
@@ -1422,23 +1422,6 @@ app.post('/send-support-email', async (req, res) => {
       // Usage example
       sendMessageToGroup(message);
 
-
-      const CHAT_ID1 = '5225506568'; // This can be your group chat ID
-      async function sendMessageToAdmin(message,amount) {
-        try {
-          const response = await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            chat_id: CHAT_ID1,
-            text: `Hello Cattatude, ${email} has asked for support,\nMessage:${message} `,
-          });
-
-          console.log('Message sent:', response.data);
-        } catch (error) {
-          console.error('Error sending message:', error);
-        }
-      }
-
-      // Usage example
-      sendMessageToAdmin(message);
 
       // Redirect the user or provide a response as needed
       res.redirect('/dash')

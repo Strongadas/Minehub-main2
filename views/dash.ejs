@@ -1,4 +1,55 @@
 <%- include('partials/header-user') %>
+<style>
+      .purple-bg-color {
+            background-color: #182f47;
+        }
+        .round-corner {
+            border-radius: 10px;
+        }
+        .font-10 {
+            font-size: 10px;
+        }
+        .font-12 {
+            font-size: 12px;
+        }
+        .font-16 {
+            font-size: 16px;
+        }
+        .font-28 {
+            font-size: 28px;
+        }
+        .weight-300 {
+            font-weight: 300;
+        }
+        .weight-600 {
+            font-weight: 600;
+        }
+        .weight-700 {
+            font-weight: 700;
+        }
+        .white-color {
+            color: white;
+        }
+        .white-color-2 {
+            color: #f2f2f2;
+        }
+        .purple-color-2 {
+            color: #6a1b9a;
+        }
+        .grey-bg-color {
+            background-color: #e0e0e0;
+        }
+        .orange-bg-color {
+            background-color: #ff9800;
+        }
+        #chart{
+            width: 100%;
+        }
+        #balance{
+            padding-top: 50px;
+        }
+
+</style>
 <div class="main">
   <nav class="navbar navbar-expand px-4 py-3">
       <form action="#" class="d-none d-sm-inline-block">
@@ -27,83 +78,52 @@
               <hr></hr>
         
               <div class="row">
-                  <div class="col-12 col-md-4 ">
-                      <div class="card border-0 custom-card">
-                          <div class="card-body py-4">
-                              <h5 class="mb-2 fw-bold">
-                                
-                                <div class="icon-label"> <i class="fas fa-coins text-warning"></i> Current Balance</div>
-                              </h5>
-                              <p class="mb-2 fw-bold">
-                                <span><img src="/images/coin-1.svg" width="24" height="27" alt="bitcoin logo"></span>
-                                <%= updatedBalance %>
-                              </p>
-                              
-                              <div class="mb-0">
-                                  <span class="badge text-success me-2">
-                                      +2.5% Dialy 
-                                  </span> <br>
-                                  <span class=" fw-bold">
-                                    <label class="text-muted"><i class="fas fa-exclamation-circle text-danger"></i> <!-- Alert icon -->
-                                      The AI mines every 10min</label>
-                                    <a href="/withdraw" class="btn btn-success">Withdraw</a>
-                                  </span>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="col-12 col-md-4 ">
-                      <div class="card  border-0 custom-card">
-                          <div class="card-body py-4">
-                              <h5 class="mb-2 fw-bold">
-                                 
-                    <div class="icon-label"> <span class="text-warning"> <i class="fas fa-chart-line text-success"></i> 1 BTC </span> - Bitcoin Price</div>
-                              </h5>
-                              <p class="mb-2 fw-bold">
-                                <div class="card-title-wrapper">
-                                  <img src="/images/coin-1.svg" width="24" height="24" alt="bitcoin logo">
-                                  <a href="#" class="card-title"></a>
-                                  <span class="fw-bold">
-                                    BITCOIN <span class="span">BTC/USD</span>
-                                  </span>
-                              </div>
-                             
-                              </p>
-                              <div class="mb-0">
-                                  <span class="badge text-success me-2">
+                <div class="col-md-5 col-sm-6" id="balance">
+                    <div class="p-4 pt-4 d-flex flex-column purple-bg-color round-corner">
+                        <span class="text-uppercase font-10 weight-600 white-color-2">Balance Details</span>
+                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance %></span>
+                
+                        <span class="font-12 weight-300 white-color-2"> 
+                            <% if (user.hashRates && user.hashRates.length > 0) { %>
+                                <% user.hashRates.forEach(rate => { %>
+                                    <strong>Hash Rate:</strong> 
+                                    <span class="text-warning"><%= rate.hashRate %> Hs</span>
+                                <% }); %>
+                            <% } else { %>
+                                <strong>Hash Rate:</strong> 
+                                <span class="text-warning">0 Hs</span>
+                            <% } %>
+                        </span> 
+                
+                        <div class="d-flex flex-row justify-content-between mt-4">
+                            <div class="d-flex flex-column">
+                                <span class="font-16 weight-600 white-color">
                                     <% if (cryptoData && cryptoData.USD) { %>
-                                      <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD %></data>
-                                      <% } else { %>
-                                      <p>No USD value available for Bitcoin</p>
-                                      <% } %>
-                                  </span>
-                                  
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+                                        <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD %></data>
+                                    <% } else { %>
+                                        <p>No USD value available for Bitcoin</p>
+                                    <% } %>
+                                </span>
+                                <span class="font-12 weight-300 white-color-2">Income</span>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <span class="font-16 weight-600 white-color">1 BTC</span>
+                                <span class="font-12 weight-300 white-color-2">+2.5% Dialy</span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row mt-4">
+                            <a href="/buy-contracts" class="btn flex-grow-1 me-1 py-2 text-uppercase font-12 weight-700 purple-color-2 grey-bg-color">Buy Hashrate</a>
+                            <a href="/withdraw" class="btn flex-grow-1 ms-1 py-2 text-uppercase font-12 weight-700 white-color orange-bg-color">Withdraw</a>
+                        </div>
+                    </div>
+                </div>
+                
 
-                  <div class="col-12 col-md-4 ">
-                      <div class="card border-0 custom-card">
-                          <div class="card-body py-4">
-                              <h5 class="mb-2 fw-bold">
-                                
-                                <div class="icon-label"><i class="fas fa-cogs text-primary"></i> Active <% user.hashRates.forEach(rate => { %>
-                                    <strong>Hash Rate:
-                                      
-                                    </strong> <span class="text-success"><%= rate.hashRate %>
-                                      <% }); %>Hs</span> 
-                                  
-                                  </div>
-                              </h5>
-                              <p class="mb-2 fw-bold text-center">
-                                <a href="/buy-contracts" class="btn btn-primary">Buy Hashrate</a>
-                              </p>
-                             
-                          </div>
-                      </div>
-                  </div>
+    
+
+                  <div id="chart" ></div>
+
+                  
               </div>
 
 
@@ -146,8 +166,94 @@
 </div>
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
 crossorigin="anonymous"></script>
 
+
+     <script>
+        function generateDatesArray(numPoints) {
+            let dates = [];
+            let currentDate = new Date();
+            for (let i = 0; i < numPoints; i++) {
+                dates.push(new Date(currentDate).toISOString());
+                currentDate.setSeconds(currentDate.getSeconds() + 10); // Increment by 10 seconds
+            }
+            return dates;
+        }
+
+        var seriesData = {
+            prices: [8107.85, 8128.0, 8122.9, 8165.5, 8340.7, 8423.7, 8423.7, 8461.85, 8461.85, 8510.75, 8511.2],
+            dates: generateDatesArray(11)
+        };
+
+        var options = {
+            series: [{
+                name: "STOCK ABC",
+                data: seriesData.prices
+            }],
+            chart: {
+                type: 'area',
+                height: 350,
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'AI Mining Chart',
+                align: 'left'
+            },
+            subtitle: {
+                text: 'We are mining for you',
+                align: 'left'
+            },
+            labels: seriesData.dates,
+            xaxis: {
+                type: 'datetime',
+            },
+            yaxis: {
+                opposite: true
+            },
+            legend: {
+                horizontalAlign: 'left'
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+        function updateData() {
+            // Generate new data (this is just an example, you would use real data here)
+            var newPrice = seriesData.prices[seriesData.prices.length - 1] + (Math.random() - 0.5) * 10;
+            var newDate = new Date(new Date(seriesData.dates[seriesData.dates.length - 1]).getTime() + 86400000).toISOString().split('T')[0];
+            
+            seriesData.prices.push(newPrice);
+            seriesData.dates.push(newDate);
+            
+            // Keep only the last 10 data points
+            if (seriesData.prices.length > 10) {
+                seriesData.prices.shift();
+                seriesData.dates.shift();
+            }
+
+            chart.updateSeries([{
+                data: seriesData.prices
+            }], true);
+        }
+
+        // Update the chart every second
+        setInterval(updateData, 1500);
+    </script>

@@ -64,35 +64,37 @@
         </div>
       </div>
     </div>
+
+    <h1 class="text-center mb-2">Cloud Mining Calculator</h1>
+    <div class="text-center mb-2">
+      <label for="inputType">Calculate by Hash or USD:</label>
+      <select id="inputType" onchange="toggleInput()" class="form-control mb-1">
+        <option value="hashRate">Hash Rate (1 Hash = $12)</option>
+        <option value="usdAmount">USD Amount</option>
+      </select>
+      <div id="hashRateInput">
+        <label for="hashRate">Enter Hash Rate:</label>
+        <input type="number" id="hashRate" step="1" min="1" max="1000" placeholder="Hash rate (min 1, max 1000)" class="form-control mb-1">
+        <div id="hashRateError" class="error text-danger" style="display: none;">Hash rate must be between 1TH to 1000TH.</div>
+      </div>
+      <div id="usdAmountInput" style="display: none;">
+        <label for="usdAmount">Enter USD Amount:</label>
+        <input type="number" id="usdAmount" step="0.01" min="12" max="12000" placeholder="USD amount (min $12, max $12000)" class="form-control mb-1">
+        <div id="usdAmountError" class="error text-danger" style="display: none;">USD amount must be between $12 to $12000.</div>
+      </div>
+      <div id="resultContainer" style="display: none;">
+        <div id="resultText" class="font-weight-bold"></div>
+      </div>
+      <button onclick="calculateInterest()" class="btn btn-primary mt-2">Calculate</button>
+    </div>
   </div>
-<br>
-<br> <br> <br>
+
+  
 
 
-<div class="container-sm">
-  <h1 class="text-center mb-2">Cloud Mining Calculator</h1>
-  <div class="text-center mb-2">
-    <label for="inputType">Calculate by Hash or USD:</label>
-    <select id="inputType" onchange="toggleInput()" class="form-control mb-1">
-      <option value="hashRate">Hash Rate (1 Hash = $12)</option>
-      <option value="usdAmount">USD Amount</option>
-    </select>
-    <div id="hashRateInput">
-      <label for="hashRate">Enter Hash Rate:</label>
-      <input type="number" id="hashRate" step="1" min="1" max="1000" placeholder="Hash rate (min 1, max 1000)" class="form-control mb-1">
-      <div id="hashRateError" class="error text-danger" style="display: none;">Hash rate must be between 1TH to 1000TH.</div>
-    </div>
-    <div id="usdAmountInput" style="display: none;">
-      <label for="usdAmount">Enter USD Amount:</label>
-      <input type="number" id="usdAmount" step="0.01" min="12" max="12000" placeholder="USD amount (min $12, max $12000)" class="form-control mb-1">
-      <div id="usdAmountError" class="error text-danger" style="display: none;">USD amount must be between $12 to $12000.</div>
-    </div>
-    <div id="resultContainer" style="display: none;">
-      <div id="resultText" class="font-weight-bold"></div>
-    </div>
-    <button onclick="calculateInterest()" class="btn btn-primary mt-2">Calculate</button>
-  </div>
-</div>
+
+
+
 
 
   <script>
