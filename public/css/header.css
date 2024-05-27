@@ -26,11 +26,13 @@ html, body, .wrapper {
 }
  .ap{
     text-decoration: none;
+    color: #FFF;
 }
 
 .ap:hover{
     text-decoration: none;
-    background: rgb(2, 214, 2);
+    background: #039803;
+    color: white;
 }
 
 #chart{
@@ -199,6 +201,9 @@ a.sidebar-link:hover {
     .custom-card{
         padding: 20px;
         align-content: space-around;
+    }
+    .ap{
+        
     }
 }
 

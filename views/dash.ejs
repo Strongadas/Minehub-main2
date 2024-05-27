@@ -1,5 +1,9 @@
 <%- include('partials/header-user') %>
 <style>
+    .avatar {
+  border-radius: 50%; /* Make the image rounded */
+}
+
       .purple-bg-color {
             background-color: #182f47;
         }
@@ -59,7 +63,7 @@
           <ul class="navbar-nav ms-auto">
               <li class="nav-item dropdown">
                   <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
-                      <img src="/images/user.png" class="avatar img-fluid" alt="">
+                      <img src="/images/logo.jpg" class="avatar img-fluid" alt="" id="userImg">
                   </a>
                   <div class="dropdown-menu dropdown-menu-end rounded">
 
@@ -80,8 +84,10 @@
               <div class="row">
                 <div class="col-md-5 col-sm-6" id="balance">
                     <div class="p-4 pt-4 d-flex flex-column purple-bg-color round-corner">
+                        <!-- Your HTML structure -->
                         <span class="text-uppercase font-10 weight-600 white-color-2">Balance Details</span>
-                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance %></span>
+                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance.toFixed(8) %></span>
+
                 
                         <span class="font-12 weight-300 white-color-2"> 
                             <% if (user.hashRates && user.hashRates.length > 0) { %>
@@ -112,8 +118,8 @@
                             </div>
                         </div>
                         <div class="d-flex flex-row mt-4">
-                            <a href="/buy-contracts" class="btn flex-grow-1 me-1 py-2 text-uppercase font-12 weight-700 purple-color-2 grey-bg-color">Buy Hashrate</a>
-                            <a href="/withdraw" class="btn flex-grow-1 ms-1 py-2 text-uppercase font-12 weight-700 white-color orange-bg-color">Withdraw</a>
+                            <a href="/buy-contracts" class="btn ap flex-grow-1 me-1 py-2 text-uppercase font-12 weight-700 purple-color-2 grey-bg-color">Buy Hashrate</a>
+                            <a href="/withdraw" class="btn ap flex-grow-1 ms-1 py-2 text-uppercase font-12 weight-700 white-color orange-bg-color">Withdraw</a>
                         </div>
                     </div>
                 </div>

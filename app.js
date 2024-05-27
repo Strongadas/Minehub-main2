@@ -723,79 +723,81 @@ let hashrateAmount;
 let amount;
 let totalAmount= {}
 //Post Route
-app.post('/paypalRoute',ensureAuthenticated,(req,res)=>{
-  amount = req.body.amount
-  hashrateAmount = req.body.hashrateAmount
+app.post('/paypalRoute', ensureAuthenticated, (req, res) => {
+  let amount = parseFloat(req.body.amount);
+ let hashrateAmount = parseInt(req.body.hashrateAmount);
 
-  amount = parseFloat(amount)
-  hashrateAmount = parseInt(hashrateAmount);
 
-  amount = amount + 3
-  console.log("hash", hashrateAmount,typeof hashrateAmount)
-  console.log('amount',amount, typeof amount)
+console.log(hashrateAmount, typeof hashrateAmount)
+console.log(amount, typeof amount)
 
-    // Check if the amount is a valid number
-    if (isNaN(amount) || amount <= 0) {
-        return res.status(400).send('Invalid amount');
-    }
-    // Ensure it's a valid number
-    if (isNaN(hashrateAmount) || hashrateAmount <= 0) {
+  // Check if the amount is a valid number
+  if (isNaN(amount) || amount <= 0) {
+      return res.status(400).send('Invalid amount');
+  }
+  // Ensure it's a valid number
+  if (isNaN(hashrateAmount) || hashrateAmount <= 0) {
       return res.status(400).send('Invalid hashrate amount');
   }
 
-    // Construct the amount object
-     totalAmount = {
-        currency: 'USD',
-        total: amount.toFixed(2) // Format total as a string with two decimal places
-    };
+  // Adjust the amount if needed
+  amount += 3;
 
-    // Construct the payment request
-    const paymentRequest = {
-        intent: 'sale',
-        payer: {
-            payment_method: 'paypal'
-        },
-        redirect_urls: {
-            return_url: 'http://localhost:3000/payment_success',
-            cancel_url: 'http://localhost:3000/payment_error'
-        },
-        transactions: [{
-            item_list: {
-                items: [{
-                    name: 'Hashrates',
-                    sku: 'Hashrate',
-                    price: totalAmount.total,
-                    currency: totalAmount.currency,
-                    quantity: 1,
-                }]
-            },
-            amount: totalAmount,
-            description: 'Buying Hasrates'
-        }]
-    };
+  console.log("hash", hashrateAmount, typeof hashrateAmount);
+  console.log('amount', amount, typeof amount);
 
-    // Create the payment
-    paypal.payment.create(paymentRequest, (error, payment) => {
+  // Construct the amount object
+  const totalAmount = {
+      currency: 'USD',
+      total: amount.toFixed(2) // Format total as a string with two decimal places
+  };
+
+  // Construct the payment request
+  const paymentRequest = {
+      intent: 'sale',
+      payer: {
+          payment_method: 'paypal'
+      },
+      redirect_urls: {
+          return_url: 'https://minehub.onrender.com/payment_success',
+          cancel_url: 'https://minehub.onrender.com/payment_error'
+      },
+      transactions: [{
+          item_list: {
+              items: [{
+                  name: 'Hashrates',
+                  sku: 'Hashrate',
+                  price: totalAmount.total,
+                  currency: totalAmount.currency,
+                  quantity: 1,
+              }]
+          },
+          amount: totalAmount,
+          description: 'Buying Hashrates'
+      }]
+  };
+
+  // Create the payment
+  paypal.payment.create(paymentRequest, (error, payment) => {
       console.log('Payment Request:', JSON.stringify(paymentRequest, null, 2));
 
+      if (error) {
+          console.error('Error occurred while creating payment:', error);
+          return res.status(500).send('Internal Server Error');
+      }
 
-        if (error) {
-            console.error('Error occurred while creating payment:', error);
-            return res.status(500).send('Internal Server Error');
-        }
+      // Redirect to PayPal approval URL
+      const approvalUrl = payment.links.find(link => link.rel === 'approval_url');
 
-        // Redirect to PayPal approval URL
-        const approvalUrl = payment.links.find(link => link.rel === 'approval_url');
+      if (!approvalUrl) {
+          console.error('Approval URL not found in the PayPal response.');
+          return res.status(500).send('Internal Server Error');
+      }
+      console.log('Payment created successfully');
+      res.redirect(approvalUrl.href);
+  });
+});
 
-        if (!approvalUrl) {
-            console.error('Approval URL not found in the PayPal response.');
-            return res.status(500).send('Internal Server Error');
-        }
-        console.log('Payment created sucessfully')
-        res.redirect(approvalUrl.href);
-    });
-
-})
 
 app.post('/withdrawl', ensureAuthenticated, (req, res) => {
   const withdrawAmount = parseFloat(req.body.withdrawAmount); // Parse the withdrawal amount
@@ -882,14 +884,15 @@ transporter.sendMail({
 
 // Assuming you have authentication middleware (ensureAuthenticated) to get the user
 app.post('/usdt', ensureAuthenticated, async (req, res) => {
- const amount = parseFloat(req.body.amount);
-  const hashrateAmount = parseFloat(req.body.hashrateAmount);
+ let amount = parseFloat(req.body.amount);
+  let hashrateAmount = parseFloat(req.body.hashrateAmount);
   const user = req.user;
   const userEmail = user.username
   const currency = 'USDT';
 
   
-  
+  console.log(amount , typeof amount)
+  console.log(hashrateAmount, typeof hashrateAmount)
     
     res.render('usdt', { amount });
   });
@@ -1382,6 +1385,11 @@ app.post('/update-settings', async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 });
+
+app.get('/calculator-user',ensureAuthenticated,(req,res)=>{
+  res.render('calculator-user')
+})
+
 
 app.post('/send-support-email', async (req, res) => {
   try {

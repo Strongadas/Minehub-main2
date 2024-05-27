@@ -17,213 +17,313 @@
       display: block;
       margin-bottom: 10px;
     }
+    
+    .container1{
+    width: 400px;
+    border-radius: 8px;
+    padding: 40px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1),
+                0 5px 12px -2px rgba(0, 0, 0, 0.1),
+                0 18px 36px -6px rgba(0, 0, 0, 0.1);
+}
+
+.container1 .title{
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container1 form input[type="radio"]{
+    display: none;
+}
+
+.container1 form .category{
+    margin-top: 10px;
+    padding-top: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px;
+}
+
+.category label{
+    /* width: 100%; */
+    /* height: 65px; */
+    height: 145px;
+    padding: 20px;
+    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+}
+
+/* label:nth-child(2), label:nth-child(3){
+    margin: 15px 0;
+} */
+
+
+#visa:checked ~ .category .visaMethod,
+#mastercard:checked ~ .category .mastercardMethod,
+#paypal:checked ~ .category .paypalMethod,
+#AMEX:checked ~ .category .amexMethod{
+    box-shadow: 0px 0px 0px 1px #6064b6;
+}
+
+
+#visa:checked ~ .category .visaMethod .check,
+#mastercard:checked ~ .category .mastercardMethod .check,
+#paypal:checked ~ .category .paypalMethod .check,
+#AMEX:checked ~ .category .amexMethod .check{
+    display: block;
+}
+
+
+label .imgName{
+    display: flex;
+    /* justify-content: space-between;
+     */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.imgName span{
+    /* margin-left: 20px; */
+    font-family: Arial, Helvetica, sans-serif;
+
+    position: absolute;
+    top: 72%;
+    transform: translateY(-72%);
+}
+
+.imgName .imgContainer{
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    top: 35%;
+    transform: translateY(-35%);
+}
+
+img{
+    width: 50px;
+    height: auto;
+}
+
+.visa img{
+    width: 80px;
+    /* margin-left: 5px; */
+}
+
+.mastercard img{
+    width: 65px;
+}
+
+.paypal img{
+    width: 80px;
+}
+
+.AMEX img{
+    width: 50px;
+}
+
+.check{
+    display: none;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+}
+
+.check i{
+    font-size: 18px;
+}
+
+
+
 </style>
 
 <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title text-center">Buy Hashrate</h2>
-            <form id="buyHashrateForm" method="post">
-              <div class="form-group">
-                <p class="text-muted">TH1 = $12</p>
-                <label for="hashrateAmount">Hashrate Amount</label>
-              
-                <input type="number" step="any" class="form-control" id="hashrateAmount" name="hashrateAmount" placeholder="Enter Hashrate Amount"  required>
-                <small class="text-danger" id="hashrateError" style="display: none;">Limit exceeded (max 500)</small>
-                <small class="text-danger" id="hashrateError2" style="display: none;">Please enter a hash amount</small>
-              </div>
-              <div class="form-group">
-               
+    
+  <div class="container1">
+    <h2 class="card-title text-center">Buy HashRate</h2>
+    <div class="form-group">
+        
+        
+       
+        <small class="text-danger" id="hashrateError" style="display: none;">Limit exceeded (max 500)</small>
+        <small class="text-danger" id="hashrateError2" style="display: none;">Please enter a hash amount</small>
+    </div>
+        
 
-                <label for="paymentMethod">Select Payment Method</label>
-                <select class="form-control" id="paymentMethod" name="paymentMethod">
-                  <option value="creditCard">Credit Card</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="crypto">BITCOIN</option>
-                  <option value="usdt">USDT</option>
-                </select>
+    <div class="title">
+        <h4>Select a <span style="color: #6064b6">Payment</span> method</h4>
+    </div>
 
-                <label for="hashrateAmount"> Amount $</label>      
-                <input type="number" step="any" class="form-control" id="amount" name="amount" placeholder="Amount to pay" readonly>
+    <form id="buyHashrateForm" method="post" action="">
+      <p class="text-muted">TH1 = $12</p>
+        <label for="hashrateAmount">Hashrate Amount</label>
+        <input type="number" step="any" class="form-control" id="hashrateAmount" name="hashrateAmount" placeholder="Enter Hashrate Amount" required>
 
-              </div>
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">Buy Hashrate</button>
-              </div>
-            </form>
-            <hr>
-            <div class="text-center">
-              <h4>Accepted Payment Methods</h4>
-              <img src="/images/visa.png" alt="Credit Card" class="img-fluid mx-2" style="max-width: 100px;">
-              <img src="/images/coin-1.svg" alt="PayPal" class="img-fluid mx-2" style="max-width: 50px;">
-              <img src="/images/paypal.png" alt="Crypto" class="img-fluid mx-2" style="max-width: 50px;">
-            </div>
-          </div>
+
+      <label for="amount"> Amount $:</label>
+      <input type="number"  class="form-control" id="amount" name="amount" placeholder="Amount to pay" readonly>
+      
+        <input type="radio" name="payment" id="visa" value="visa">
+        <input type="radio" name="payment" id="mastercard" value="mastercard">
+        <input type="radio" name="payment" id="paypal" value="paypal">
+        <input type="radio" name="payment" id="AMEX" value="amex">
+        <div class="category">
+            <label for="visa" class="visaMethod">
+                <div class="imgName">
+                    <div class="imgContainer visa">
+                        <img src="https://i.ibb.co/vjQCN4y/Visa-Card.png" alt="Visa Card">
+                    </div>
+                    <span class="name">VISA</span>
+                </div>
+                <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+            </label>
+            <label for="mastercard" class="mastercardMethod">
+                <div class="imgName">
+                    <div class="imgContainer mastercard">
+                      <img src="/images/coin-1.svg" width="24" height="20" alt="bitcoin logo">
+                    </div>
+                    <span class="name">BITCOIN</span>
+                </div>
+                <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+            </label>
+            <label for="paypal" class="paypalMethod">
+                <div class="imgName">
+                    <div class="imgContainer paypal">
+                        <img src="https://i.ibb.co/KVF3mr1/paypal.png" alt="Paypal">
+                    </div>
+                    <span class="name">Paypal</span>
+                </div>
+                <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+            </label>
+            <label for="AMEX" class="amexMethod">
+                <div class="imgName">
+                    <div class="imgContainer AMEX">
+                      <img src="/images/coin-3.svg" width="24" height="24" alt="bitcoin logo">
+                    </div>
+                    <span class="name">USDT TRC-20</span>
+                </div>
+                <span class="check"><i class="fa-solid fa-circle-check" style="color: #6064b6;"></i></span>
+            </label>
+            
         </div>
-      </div>
-    </div>
+        <div>
+          
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Buy Hashrate</button>
+        </div>
 
-    <h1 class="text-center mb-2">Cloud Mining Calculator</h1>
-    <div class="text-center mb-2">
-      <label for="inputType">Calculate by Hash or USD:</label>
-      <select id="inputType" onchange="toggleInput()" class="form-control mb-1">
-        <option value="hashRate">Hash Rate (1 Hash = $12)</option>
-        <option value="usdAmount">USD Amount</option>
-      </select>
-      <div id="hashRateInput">
-        <label for="hashRate">Enter Hash Rate:</label>
-        <input type="number" id="hashRate" step="1" min="1" max="1000" placeholder="Hash rate (min 1, max 1000)" class="form-control mb-1">
-        <div id="hashRateError" class="error text-danger" style="display: none;">Hash rate must be between 1TH to 1000TH.</div>
-      </div>
-      <div id="usdAmountInput" style="display: none;">
-        <label for="usdAmount">Enter USD Amount:</label>
-        <input type="number" id="usdAmount" step="0.01" min="12" max="12000" placeholder="USD amount (min $12, max $12000)" class="form-control mb-1">
-        <div id="usdAmountError" class="error text-danger" style="display: none;">USD amount must be between $12 to $12000.</div>
-      </div>
-      <div id="resultContainer" style="display: none;">
-        <div id="resultText" class="font-weight-bold"></div>
-      </div>
-      <button onclick="calculateInterest()" class="btn btn-primary mt-2">Calculate</button>
-    </div>
-  </div>
-
-  
+       
+    </form>
+    
+</div>
 
 
 
+<script>
 
+function calculatePrice() {
+    const hashrateAmount = parseFloat(hashrateAmountInput.value);
+    let price = 0;
+    const errorHashrate = document.getElementById('errorhashRate');
+    const errorHashrate2 = document.getElementById('errorhashRate2');
 
-
-
-  <script>
-    function calculatePrice() {
-      const hashrateAmount = parseFloat(document.getElementById('hashrateAmount').value);
-      let price = 0;
-      let errorMessage = document.getElementById('hashrateError');
-      let errorMessage2 = document.getElementById('hashrateError2');
-
-      if (hashrateAmount >= 1 && hashrateAmount <= 1000) {
+    if (!isNaN(hashrateAmount) && hashrateAmount >= 1 && hashrateAmount <= 500) {
         price = hashrateAmount * 12;
-        errorMessage.style.display = 'none';
-      } else if (hashrateAmount === "") {
-        event.preventDefault();
-        errorMessage2.style.display = "block";
-      } else {
-        price = 0;
-        errorMessage.style.display = 'block';
-      }
-
-      document.getElementById('amount').value = price;
+        errorHashrate.style.display = 'none';
+        errorHashrate2.style.display = 'none';
+    } else if (!hashrateAmountInput.value) {
+        errorHashrate2.style.display = 'block';
+        errorHashrate.style.display = 'none';
+    } else {
+        errorHashrate.style.display = 'block';
+        errorHashrate2.style.display = 'none';
     }
 
-    document.getElementById('hashrateAmount').addEventListener('change', calculatePrice);
-    document.getElementById('hashrateAmount').addEventListener('input', calculatePrice);
+    amountInput = price.toFixed(2);
+    console.log(amountInput )
+}
 
-    document.getElementById('buyHashrateForm').addEventListener('submit', function(event) {
-      event.preventDefault();
+document.getElementById('hashrateAmount').addEventListener('change', calculatePrice);
+document.getElementById('hashrateAmount').addEventListener('input', calculatePrice);
 
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const form = document.getElementById('buyHashrateForm');
+const amountInput = document.getElementById('amount');
+const hashrateAmountInput = document.getElementById('hashrateAmount');
 
-      if (paymentMethod === 'creditCard') {
-        form.action = '/visa';
-        form.method = "post"
-      } else if (paymentMethod === 'paypal') {
-        form.action = '/paypalRoute';
-        form.method = "post"
-      } else if (paymentMethod === 'crypto') {
-        form.action = '/bitcoin';
-        form.method = "post"
-      }
-      else if (paymentMethod === 'usdt') {
-        form.action = '/usdt';
-        form.method = "post"
-      }
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('buyHashrateForm');
+    const radios = document.querySelectorAll('input[name="payment"]');
+   
 
-      form.submit();
+    const errorPay = document.getElementById('errorPay');
+
+      
+    if (!form || !radios || !amountInput || !hashrateAmountInput) {
+        console.error('One or more elements are missing.');
+        return;
+    }
+
+    // Calculate the amount based on the hashrate amount
+    hashrateAmountInput.addEventListener('input', function () {
+        const hashrateAmount = parseFloat(hashrateAmountInput.value) || 0;
+        amountInput.value = (hashrateAmount * 12).toFixed(2); // Assuming $12 per TH1
     });
 
+    // Add a change event listener to the radio buttons for payment method selection
+    radios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            const selectedPaymentMethod = radio.value;
 
-   
-      function toggleInput() {
-        const inputType = document.getElementById("inputType").value;
-        const hashRateInput = document.getElementById("hashRateInput");
-        const usdAmountInput = document.getElementById("usdAmountInput");
-  
-        if (inputType === "hashRate") {
-          hashRateInput.style.display = "block";
-          usdAmountInput.style.display = "none";
-        } else {
-          hashRateInput.style.display = "none";
-          usdAmountInput.style.display = "block";
+            switch (selectedPaymentMethod) {
+                case 'paypal':
+                  console.log("paypal selected")
+                    form.action = '/paypalRoute';
+                    break;
+                case 'visa':
+                    form.action = '/visa';
+                    console.log("visa selected")
+                    break;
+                case 'mastercard':
+                    form.action = '/bitcoin';
+                    break;
+                case 'amex':
+                    form.action = '/usdt';
+                    break;
+                default:
+                    form.action = '';
+            }
+        });
+    });
+
+    // Ensure form submission only occurs if a payment method is selected
+    form.addEventListener('submit', function (event) {
+        const selectedPayment = document.querySelector('input[name="payment"]:checked');
+        if (!selectedPayment) {
+            event.preventDefault();
+            alert('Please select a payment method.');
         }
-      }
-  
-      function calculateInterest() {
-        const inputType = document.getElementById("inputType").value;
-  
-        if (inputType === "hashRate") {
-          const hashRate = parseInt(document.getElementById("hashRate").value);
-          if (hashRate < 1 || hashRate > 1000) {
-            document.getElementById("hashRateError").style.display = "block";
-            document.getElementById("usdAmountError").style.display = "none";
-            return;
-          } else {
-            document.getElementById("hashRateError").style.display = "none";
-          }
-        } else {
-          const usdAmount = parseFloat(document.getElementById("usdAmount").value);
-          if (usdAmount < 12 || usdAmount > 12000) {
-            document.getElementById("usdAmountError").style.display = "block";
-            document.getElementById("hashRateError").style.display = "none";
-            document.getElementById("resultContainer").style.display = "none";
-            return;
-          } else {
-            document.getElementById("usdAmountError").style.display = "none";
-          }
-        }
-  
-        // Calculate interest and display result
-        let usdAmount;
-        if (inputType === "hashRate") {
-          const hashRate = parseInt(document.getElementById("hashRate").value);
-          usdAmount = hashRate * 12;
-        } else {
-          usdAmount = parseFloat(document.getElementById("usdAmount").value);
-        }
-  
-        const dailyInterest = usdAmount * 0.025;
-        const weeklyInterest = dailyInterest * 7;
-        const monthlyInterest = dailyInterest * 30;
-
-        const resultText = `
-        <span>With an investment of $${usdAmount.toFixed(2)},</span>
-        <span>the potential daily yield at 2.5% is $${dailyInterest.toFixed(2)},</span>
-        <span>the estimated weekly return could reach $${weeklyInterest.toFixed(2)},</span>
-        <span>and the monthly return might be around $${monthlyInterest.toFixed(2)}.</span>
-        <span style="color: green;">This contract has a duration of one year.</span>
-        `;
+    });
+});
 
 
-  
-        document.getElementById("resultText").innerHTML = resultText;
-        document.getElementById("resultContainer").style.display = "block";
-      }
     
-  </script>
 
 
 
 
-
-
-
-
-
-
-
+</script>
 
 
 
