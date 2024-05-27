@@ -62,12 +62,10 @@
       <div class="navbar-collapse collapse">
           <ul class="navbar-nav ms-auto">
               <li class="nav-item dropdown">
-                  <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                  <a href="/admin" class="nav-icon pe-md-0">
                       <img src="/images/logo.jpg" class="avatar img-fluid" alt="" id="userImg">
                   </a>
-                  <div class="dropdown-menu dropdown-menu-end rounded">
-
-                  </div>
+                 
               </li>
           </ul>
       </div>
@@ -86,7 +84,7 @@
                     <div class="p-4 pt-4 d-flex flex-column purple-bg-color round-corner">
                         <!-- Your HTML structure -->
                         <span class="text-uppercase font-10 weight-600 white-color-2">Balance Details</span>
-                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance.toFixed(8) %></span>
+                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance %></span>
 
                 
                         <span class="font-12 weight-300 white-color-2"> 
@@ -110,7 +108,7 @@
                                         <p>No USD value available for Bitcoin</p>
                                     <% } %>
                                 </span>
-                                <span class="font-12 weight-300 white-color-2">Income</span>
+                                <span class="font-12 weight-500 white-color-2" id="countdown"> :10:00</span>
                             </div>
                             <div class="d-flex flex-column">
                                 <span class="font-16 weight-600 white-color">1 BTC</span>
@@ -262,4 +260,38 @@ crossorigin="anonymous"></script>
 
         // Update the chart every second
         setInterval(updateData, 1500);
+
+    
+        document.addEventListener('DOMContentLoaded', (event) => {
+    const countdownElement = document.getElementById('countdown');
+    const countdownStartMinutes = 10;
+    const countdownStartSeconds = countdownStartMinutes * 60;
+    let remainingTime = countdownStartSeconds;
+    let lastTimestamp = localStorage.getItem('lastTimestamp');
+    let lastRemainingTime = localStorage.getItem('remainingTime');
+
+    if (lastTimestamp && lastRemainingTime) {
+        const elapsedTime = Math.floor((Date.now() - lastTimestamp) / 1000);
+        remainingTime = lastRemainingTime - elapsedTime;
+        if (remainingTime <= 0) {
+            remainingTime = countdownStartSeconds + (remainingTime % countdownStartSeconds);
+        }
+    }
+
+    function updateCountdown() {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        countdownElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        remainingTime--;
+        if (remainingTime < 0) {
+            remainingTime = countdownStartSeconds;
+        }
+        localStorage.setItem('remainingTime', remainingTime);
+        localStorage.setItem('lastTimestamp', Date.now());
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown(); // Initial call to set the correct time immediately
+});
+
     </script>

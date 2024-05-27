@@ -1,0 +1,40 @@
+const calculateReturnsEveryTenMinutes = (depositedBtc) => {
+  const returnPercentage = 0.0000007; // 0.0173% as a decimal
+  const tenMinReturn = 0.0000000 + returnPercentage;
+  return tenMinReturn;
+};
+
+const updateBalanceWithMinedBTC = async (userId, minedBTC) => {
+  try {
+    const user = await User.findById(userId);
+    user.balance += minedBTC;
+    await user.save();
+  } catch (error) {
+    console.error('Error updating balance:', error);
+  }
+};
+
+const mineAndCalculateReturns = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user || !user.despositedBtc || user.despositedBtc <= 0) {
+      console.log('User has no deposited BTC or invalid deposit amount');
+      return;
+    }
+
+    const tenMinReturn = calculateReturnsEveryTenMinutes(user.despositedBtc);
+    console.log("user has deposited btc")
+    await updateBalanceWithMinedBTC(userId, tenMinReturn);
+
+    console.log('Ten minutes return calculated and added to the user balance:', tenMinReturn);
+  } catch (error) {
+    console.error('Error occurred during mining and return calculation:', error);
+  }
+};
+
+const startMiningInterval = (userId) => {
+  // Set interval to run the mineAndCalculateReturns function every 10 minutes (600,000 milliseconds)
+  setInterval(async () => {
+    await mineAndCalculateReturns(userId);
+  }, 600000); // Adjust the time interval as needed (10 minutes = 600,000 milliseconds)
+};

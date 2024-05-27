@@ -17,6 +17,7 @@ const Coinpayments = require('coinpayments');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const multer = require('multer'); 
+const { type } = require('os')
 
 
 
@@ -86,6 +87,14 @@ const userSchema = new mongoose.Schema ({
     name:String,
     username: String,
     password: String,
+    admin: {
+      type: Boolean,
+      default: false // Set default value to false
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     balance:{
@@ -227,7 +236,214 @@ app.get('/',async(req,res)=>{
       throw error;
     }
   }
-  
+
+  // Middleware function to check if the user is an admin
+function isAdmin(req, res, next) {
+  // Check if the user is authenticated
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  // Check if the user is an admin (you need to implement this logic)
+  if (!req.user || !req.user.admin) {
+    // If the user is not authenticated as an admin, redirect to the home page or display an error message
+    return res.redirect('/');
+  }
+  // If the user is authenticated and is an admin, proceed to the next middleware or route handler
+  next();
+}
+
+// Route for the admin page
+app.get('/admin', isAdmin, async (req, res) => {
+  try {
+    const user = req.user
+    // Reactivate all users
+    await User.updateMany({}, { $set: { isActive: true } });
+
+    // Calculate the total number of users
+    const totalUsers = await User.countDocuments();
+      // Retrieve all users
+    const users = await User.find();
+   
+
+    res.render('admin', {
+      totalUsers,
+      users,
+      user
+      
+    });
+  } catch (error) {
+    console.error('Error in admin route:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/admin/edit/:id', isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Fetch the hash rate data
+    const hashRates = user.hashRates;
+
+    res.render('editUser', { user, hashRates });
+  } catch (error) {
+    console.error('Error in edit route:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log('Error with transporter configuration:', error);
+  } else {
+    console.log('Transporter is ready to send messages');
+  }
+});
+
+
+// Function to update hash rate for a specific coin
+function updateHashRateForCoin(user, coin, hashRate) {
+  const existingCoinIndex = user.hashRates.findIndex(rate => rate.coin === coin);
+
+  if (existingCoinIndex !== -1) {
+      // If the coin exists, update its hash rate by adding the new amount
+      user.hashRates[existingCoinIndex].hashRate += hashRate;
+      user.hashRates[existingCoinIndex].timestamp = new Date();
+  } else {
+      // If the coin doesn't exist, create a new entry
+      user.hashRates.push({
+          coin,
+          hashRate,
+          timestamp: new Date()
+      });
+  }
+}
+
+app.post('/admin/edit/:id', isAdmin, async (req, res) => {
+  const userId = req.params.id;
+  const { name, username, despositedAmount, ...hashRates } = req.body;
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Update user details
+    user.name = name;
+    user.username = username;
+    user.despositedAmount = despositedAmount;
+    user.paid = true;
+
+    async function convertUSDtoBTC(amountInUSD) {
+      try {
+        const apiUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd';
+        const response = await axios.get(apiUrl);
+
+        const btcToUsd = response.data.bitcoin.usd;
+        const amountInBTC = amountInUSD / btcToUsd;
+
+        return amountInBTC.toFixed(8); // Convert and return as a string with 8 decimal places
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        return null;
+      }
+    }
+
+    // Update hash rates
+    for (const coin in hashRates) {
+      const hashRateString = hashRates[coin];
+      // Convert the hash rate string to a number
+      const hashRate = parseFloat(hashRateString);
+
+      // Check if the hash rate is a valid number
+      if (!isNaN(hashRate)) {
+        // Find the index of the coin in user's hashRates array
+        const existingCoinIndex = user.hashRates.findIndex(rate => rate.coin === coin);
+
+        // If the coin exists, update its hash rate
+        if (existingCoinIndex !== -1) {
+          user.hashRates[existingCoinIndex].hashRate += hashRate;
+          user.hashRates[existingCoinIndex].timestamp = new Date();
+        } else {
+          // If the coin doesn't exist, create a new entry
+          user.hashRates.push({
+            coin,
+            hashRate,
+            timestamp: new Date()
+          });
+        }
+      } else {
+        console.log(`Invalid hash rate value for ${coin}: ${hashRateString}`);
+      }
+    }
+
+    // Convert deposited amount to BTC
+    const amountInUSD = parseFloat(despositedAmount); // Ensure despositedAmount is a number
+    const amountInBTCString = await convertUSDtoBTC(amountInUSD);
+
+    if (amountInBTCString !== null) {
+      // Ensure despositedBtc is a number before adding to it
+      user.despositedBtc = parseFloat(user.despositedBtc) || 0;
+      user.despositedBtc += parseFloat(amountInBTCString);
+
+      // Save the updated user
+      await user.save();
+      console.log('Amount saved to user:', user.despositedBtc);
+
+      // Create a new transaction
+      const newTransaction = new Transaction({
+        userId: user._id,
+        amount: amountInUSD,
+        description: 'Deposit'
+      });
+
+      // Save the transaction
+      await newTransaction.save();
+      console.log('Transaction saved:', newTransaction);
+    } else {
+      console.log('Failed to convert amount');
+    }
+
+    // Start mining interval after 10 minutes
+    setTimeout(() => {
+      startMiningInterval(req.user._id);
+    }, 600000); // Set to start mining after 10 minutes (600,000 milliseconds)
+
+   // Send confirmation email
+   console.log(user.username)
+   try {
+    console.log('Attempting to send confirmation email...');
+    await transporter.sendMail({
+      to: user.username,
+      subject: 'Deposit Confirmation',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #007bff;">Deposit Confirmation</h2>
+          <p>Hello ${user.name},</p>
+          <p>Your deposit for TH has been processed.</p>
+          <p>If you have any questions or concerns, please contact our support team.</p>
+          <p>Paid Amount: $ ${amountInUSD}</p>
+          <p style="font-weight: bold;">Thank you Minehub.</p>
+        </div>
+      `,
+    });
+    console.log('Confirmation email sent successfully');
+  } catch (emailError) {
+    console.error('Error sending confirmation email:', emailError);
+  }
+
+    res.redirect('/admin'); // Redirect to admin page after successful update
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
   app.get('/login',(req,res)=>{
@@ -287,6 +503,7 @@ const mineAndCalculateReturns = async (userId) => {
     }
 
     const tenMinReturn = calculateReturnsEveryTenMinutes(user.despositedBtc);
+    console.log("user has deposited btc")
     await updateBalanceWithMinedBTC(userId, tenMinReturn);
 
     console.log('Ten minutes return calculated and added to the user balance:', tenMinReturn);
@@ -304,7 +521,7 @@ const startMiningInterval = (userId) => {
 
 app.get('/dash', async (req, res, next) => {
   // ... Existing authentication and data fetching logic
-
+const user = req.user
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
@@ -313,7 +530,11 @@ app.get('/dash', async (req, res, next) => {
     return res.render('twoFactorVerification', { message: "please verify" });
   }
 
+  if(user.despositedBtc){
+    console.log(user.despositedBtc,"user has deposit")
+  }
   try {
+    
     const cryptoData = await getCryptoPrices(); // Assuming this function fetches crypto prices
 
     // Fetch recent transactions from the database

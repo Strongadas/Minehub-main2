@@ -1,0 +1,153 @@
+<%- include('partials/header-admin') %>
+
+
+
+    <div class="main">
+        <nav class="navbar navbar-expand px-4 py-3">
+            <form action="#" class="d-none d-sm-inline-block">
+
+            </form>
+            <div class="navbar-collapse collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-icon pe-md-0">
+                            <img src="/images/logo.jpg" class="avatar img-fluid" alt="">
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end rounded">
+
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="content px-3 py-4">
+            <div class="container-fluid">
+                <div class="mb-3">
+                    <h3 class="fw-bold fs-4 mb-3">Admin Dashboard</h3>
+                    <div class="row">
+                        <div class="col-12 col-md-4 ">
+                            <div class="card border-0">
+                                <div class="card-body py-4 bgColor">
+                                    <h5 class="mb-2 fw-bold">
+                                        All Users
+                                    </h5>
+                                    <p class="mb-2 fw-bold">
+                                       Total : <%= totalUsers %> Users
+                                    </p>
+                                    <div class="mb-0">
+                                        <span class="badge text-success me-2">
+                                            +2.0%
+                                        </span>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 ">
+                            <div class="card  border-0">
+                                <div class="card-body py-4 bgColor">
+                                    <h5 class="mb-2 fw-bold">
+                                        Investors
+                                    </h5>
+                                    <p class="mb-2 fw-bold">
+                                      
+                                    </p>
+                                    <div class="mb-0">
+                                        <span class="badge text-success me-2">
+                                            +9.0%
+                                        </span>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4 ">
+                            <div class="card border-0">
+                                <div class="card-body py-4 bgColor">
+                                    <h5 class="mb-2 fw-bold">
+                                        Withdrawals
+                                    </h5>
+                                    <p class="mb-2 fw-bold">
+                                        $72,540
+                                    </p>
+                                    <div class="mb-0">
+                                        <span class="badge text-success me-2">
+                                            +9.0%
+                                        </span>
+                                        <span class="fw-bold">
+                                            Since Last Month
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <h3 class="fw-bold fs-4 my-3">Users Details 
+                    </h3>
+                    <div class="container">
+                        
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Username</th>
+                              <th scope="col">-</th>
+                              <th scope="col">Email</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% users.forEach((user, index) => { %>
+                              <tr>
+                                <th scope="row"><%= index + 1 %></th>
+                                <td><%= user.name %></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.username %></td>
+                                <td><a href="/admin/edit/<%= user._id %>" >Edit</a></td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                </div>
+            </div>
+        </main>
+
+
+
+
+
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row text-body-secondary">
+                    <div class="col-6 text-start ">
+                        <a class="text-body-secondary" href=" #">
+                            <strong>@ <%= user.name %></strong>
+                        </a>
+                    </div>
+                    <div class="col-6 text-end text-body-secondary d-none d-md-block">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <a class="text-body-secondary" href="#">Contact</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="text-body-secondary" href="#">About Us</a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="text-body-secondary" href="#">Terms & Conditions</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
+
+
+<%- include('partials/footer-admin') %>
