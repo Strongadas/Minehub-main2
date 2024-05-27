@@ -478,8 +478,10 @@ app.get('/calculator',(req,res)=>{
   res.render('calculator')
 })
 
+
+
 const calculateReturnsEveryTenMinutes = (depositedBtc) => {
-  const returnPercentage = 0.0000007; // 0.0173% as a decimal
+  const returnPercentage = 0.00000007; // 0.00007% per 10 minutes
   const tenMinReturn = 0.0000000 + returnPercentage;
   return tenMinReturn;
 };
@@ -487,8 +489,13 @@ const calculateReturnsEveryTenMinutes = (depositedBtc) => {
 const updateBalanceWithMinedBTC = async (userId, minedBTC) => {
   try {
     const user = await User.findById(userId);
-    user.balance += minedBTC;
-    await user.save();
+    if (user) {
+      user.balance += minedBTC;
+      await user.save();
+      console.log(`User balance updated with mined BTC: ${minedBTC}`);
+    } else {
+      console.error('User not found');
+    }
   } catch (error) {
     console.error('Error updating balance:', error);
   }
@@ -502,8 +509,15 @@ const mineAndCalculateReturns = async (userId) => {
       return;
     }
 
+    // Check if user has paid
+    if (!user.paid) {
+      console.log('User has not paid, mining cannot proceed');
+      return;
+    }
+    
+    console.log("User has paid")
+
     const tenMinReturn = calculateReturnsEveryTenMinutes(user.despositedBtc);
-    console.log("user has deposited btc")
     await updateBalanceWithMinedBTC(userId, tenMinReturn);
 
     console.log('Ten minutes return calculated and added to the user balance:', tenMinReturn);
@@ -513,18 +527,27 @@ const mineAndCalculateReturns = async (userId) => {
 };
 
 const startMiningInterval = (userId) => {
-  // Set interval to run the mineAndCalculateReturns function every 10 minutes (600,000 milliseconds)
-  setInterval(async () => {
-    await mineAndCalculateReturns(userId);
-  }, 600000); // Adjust the time interval as needed (10 minutes = 600,000 milliseconds)
+  setTimeout(() => {
+    const mine = async () => {
+      await mineAndCalculateReturns(userId);
+      console.log('Mining operation completed.'); // Log a message after mining completes
+      setTimeout(mine, 600000); // Recursively call after 10 minutes
+    };
+
+    mine(); // Start the first call immediately
+  }, 600000); // Delay the initial call by 10 minutes
 };
 
+
+
 app.get('/dash', async (req, res, next) => {
-  // ... Existing authentication and data fetching logic
+  
+
 const user = req.user
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
+  const userId = user.id
 
   if (req.user && req.user.twoFactorAuthEnabled && !req.user.twoFactorAuthCompleted) {
     return res.render('twoFactorVerification', { message: "please verify" });
@@ -549,10 +572,7 @@ const user = req.user
     // Render the dash view with initial data
     res.render('dash', { cryptoData, user: req.user, recentTransactions, updatedBalance });
 
-    // Start mining interval after 10 minutes
-    setTimeout(() => {
-      startMiningInterval(req.user._id);
-    }, 600000); // Set to start mining after 10 minutes (600,000 milliseconds)
+    startMiningInterval(userId);
   } catch (error) {
     console.error('Error occurred while fetching data:', error);
     res.status(500).send('Error fetching data');
