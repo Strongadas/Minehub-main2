@@ -20,15 +20,13 @@ const multer = require('multer');
 const { type } = require('os')
 
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 4000
 
 paypal.configure({
   mode: 'live', 
   client_id:process.env.PAYPAL_CLIENT_ID ,
   client_secret: process.env.PAYPAL_SECRET,
 })
-
-
 
 
 /*
@@ -78,6 +76,7 @@ app.use(express.static('public'))
 app.set('view engine','ejs')
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     secret:process.env.SECRET,
@@ -115,7 +114,7 @@ const userSchema = new mongoose.Schema ({
       type:String,
 
     },
-    referralCode: String,
+    referralCode: { type: String, unique: true, default: () => uuidv4() },
     hashRates: [
       {
         coin: String,
@@ -172,11 +171,11 @@ const transactionSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-// Referral schema
+
 const referralSchema = new mongoose.Schema({
-  referrer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  referred: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  createdAt: { type: Date, default: Date.now },
+  referrerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  referredId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  rewardStatus: { type: String, default: 'pending' },
 });
 
 
@@ -208,9 +207,10 @@ function ensureAuthenticated(req, res, next) {
     
     res.redirect('/login');
 }
-// Generate a unique referral code for a new user
-function generateReferralCode(){
-  return uuidv4().substr(0, 8); // Unique identifier using uuid, shortened for brevity
+
+// Function to generate referral code
+const generateReferralCode = () => {
+  return Math.random().toString(36).substring(2, 15);
 };
 
 
@@ -452,17 +452,47 @@ app.post('/admin/edit/:id', isAdmin, async (req, res) => {
 });
 
 
+// Route to display referrals for the logged-in user
+app.get('/referrals', ensureAuthenticated, async (req, res) => {
+  try {
+    // Retrieve or generate the referral code for the logged-in user
+    const referralCode = req.user.referralCode; // Assuming referralCode is a property of the user object
+
+    // Construct registration link with referral code query parameter
+    const registrationLink = `http://localhost:${PORT}/register?referralCode=${referralCode}`;
+
+    // Fetch referrals for the logged-in user
+    const referrals = await Referral.find({ referrerId: req.user._id }).populate('referredId');
+    const totalReferredUsers = await Referral.countDocuments({ referrerId: req.user._id });
+
+    res.render('referral', { referrals, user: req.user, totalReferredUsers, registrationLink });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
+
+
  app.get('/login',(req,res)=>{
     const errorMessage = req.flash('error')[0];
     const message = "please verify"
     res.render('login',{errorMessage,message})
   })
+
  app.get('/register',(req,res)=>{
-    res.render('register')
+
+    const referralCode = req.query.referralCode || null
+
+    console.log("The url is ",referralCode)
+
+    res.render('register',{referralCode})
   })
+
+
 app.get('/forgot-password', (req, res) => {
     res.render('forgot-password'); 
   });
+
 app.get('/reset/:token', (req, res) => {
     const token = req.params.token;
   
@@ -561,8 +591,65 @@ const startMiningInterval = (userId) => {
   }, 600000); // Delay the initial call by 10 minutes
 };
 
+async function getBTCtoUSDRate() {
+  try {
+    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    return response.data.bitcoin.usd;
+  } catch (error) {
+    console.error('Error fetching BTC to USD rate:', error);
+    throw error;
+  }
+}
+
+app.get('/dash', async (req, res, next) => {
+  const user = req.user;
+  if (!req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  const userId = user.id;
+
+  if (req.user && req.user.twoFactorAuthEnabled && !req.user.twoFactorAuthCompleted) {
+    return res.render('twoFactorVerification', { message: "please verify" });
+  }
+
+  if (user.despositedBtc) {
+    console.log(user.despositedBtc, "user has deposit");
+  }
+
+  try {
+    const cryptoData = await getCryptoPrices(); // Assuming this function fetches crypto prices
+    const btcToUsdRate = await getBTCtoUSDRate(); // Fetch BTC to USD conversion rate
+
+    // Fetch recent transactions from the database
+    const recentTransactions = await Transaction.find({ userId: req.user._id })
+      .sort({ timestamp: -1 })
+      .limit(5);
+
+    // Fetch updated user data
+    const updatedUser = await User.findById(req.user._id);
+    const updatedBalance = updatedUser.balance;
+
+    // Calculate the user's balance in USD
+    const balanceInUsd = updatedBalance * btcToUsdRate;
+
+    // Render the dash view with initial data
+    res.render('dash', {
+      cryptoData,
+      user: req.user,
+      recentTransactions,
+      updatedBalance,
+      balanceInUsd,
+    });
+
+    startMiningInterval(userId);
+  } catch (error) {
+    console.error('Error occurred while fetching data:', error);
+    res.status(500).send('Error fetching data');
+  }
+});
 
 
+/*
 app.get('/dash', async (req, res, next) => {
   
 
@@ -601,8 +688,7 @@ const user = req.user
     res.status(500).send('Error fetching data');
   }
 });
-
-
+*/
 app.get('/transactions',ensureAuthenticated,async(req,res)=>{
   const user = req.user
   // Fetch recent transactions from the database, assuming Transaction is your model
@@ -613,10 +699,41 @@ app.get('/transactions',ensureAuthenticated,async(req,res)=>{
 
   res.render('transaction-history',{user,recentTransactions})
 })
-app.get('/withdraw',ensureAuthenticated,(req,res)=>{
-  const user = req.user
-  res.render('withdraw',{user})
-})
+
+app.get('/withdraw', ensureAuthenticated, async (req, res) => {
+  const user = req.user;
+
+  try {
+    // Fetch BTC to USD conversion rate
+    const btcToUsdRate = await getBTCtoUSDRate();
+
+    // Minimum withdrawal amount in BTC
+    const minWithdrawalAmountBTC = 0.00019948;
+
+    // Calculate the minimum withdrawal amount in USD
+    const minWithdrawalAmountUSD = minWithdrawalAmountBTC * btcToUsdRate;
+
+    // Fetch updated user data
+    const updatedUser = await User.findById(user._id);
+    const updatedBalance = updatedUser.balance;
+
+    // Check if user's balance is less than the minimum withdrawal amount
+    if (updatedBalance < minWithdrawalAmountBTC) {
+      // If user's balance is insufficient, render error message
+      return res.render('withdraw', { user, errorMessage: 'Insufficient balance for withdrawal' });
+    }
+
+    // If user's balance is sufficient, render withdrawal page
+    res.render('withdraw', { user, minWithdrawalAmountUSD });
+  } catch (error) {
+    console.error('Error occurred while fetching data:', error);
+    res.status(500).send('Error fetching data');
+  }
+});
+
+
+
+
 app.get('/buy-contracts',ensureAuthenticated,(req,res)=>{
 
   const user = req.user
@@ -1754,17 +1871,17 @@ app.post('/verify', async (req, res) => {
 });
 
   
-
-
+// User registration route
 app.post('/register', async (req, res) => {
   try {
-    const { username, password, name } = req.body;
+    let { username, password, name, referralCode } = req.body;
 
-    const referralCode = generateReferralCode()
+  
 
-    console.log("referralCode",referralCode)
+    console.log('Referral Code:', referralCode); // Add this line to log the referral code
 
     const newUser = new User({ username, name });
+
     // Register the user using Passport's register method
     User.register(newUser, password, async (err, user) => {
       if (err) {
@@ -1772,23 +1889,32 @@ app.post('/register', async (req, res) => {
         return res.redirect('/');
       } else {
         try {
-          // Check if there's a referralCode in the request
+          // Check if there's a referral code
           if (referralCode) {
             // Find the user who referred this new user
             const referrer = await User.findOne({ referralCode });
             if (referrer) {
               // Save the referral relationship in the database
               const referral = new Referral({
-                referrer: referrer._id,
-                referred: user._id,
+                referrerId: referrer._id,
+                referredId: user._id,
+                rewardStatus: 'pending',
               });
               await referral.save();
-              // Handle rewards to the referrer here
+
+              console.log('Referral saved:', referral);
+              // Credit the referrer with a balance of 0.0000029
+              referrer.balance += 0.0000009;
+              await referrer.save();
+
+              // Update the referral's reward status to 'success'
+              referral.rewardStatus = 'success';
+              await referral.save();
             }
           }
-          // Authenticate the user and redirect to dashboard
+          // Authenticate the user and redirect to the dashboard
           passport.authenticate('local')(req, res, () => {
-            res.redirect('/dash?welcomeMessage');
+            res.redirect('/dash');
           });
         } catch (error) {
           console.log(error);
@@ -1801,6 +1927,12 @@ app.post('/register', async (req, res) => {
     res.redirect('/');
   }
 });
+
+
+
+
+
+
 
 
 app.post(

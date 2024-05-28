@@ -98,20 +98,22 @@
                                 <span class="text-warning">0 Hs</span>
                             <% } %>
                         </span> 
-                
+                      
+                          
                         <div class="d-flex flex-row justify-content-between mt-4">
                             <div class="d-flex flex-column">
                                 <span class="font-16 weight-600 white-color">
-                                    <% if (cryptoData && cryptoData.USD) { %>
-                                        <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD %></data>
-                                    <% } else { %>
-                                        <p>No USD value available for Bitcoin</p>
-                                    <% } %>
+                                    $<%= balanceInUsd.toFixed(2) %>
+                                    
                                 </span>
                                 <span class="font-12 weight-500 white-color-2" id="countdown"> :10:00</span>
                             </div>
                             <div class="d-flex flex-column">
-                                <span class="font-16 weight-600 white-color">1 BTC</span>
+                                <span class="font-16 weight-600 white-color">1 BTC / <% if (cryptoData && cryptoData.USD) { %>
+                                    <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD.toFixed(1) %></data>
+                                <% } else { %>
+                                    <p>No USD value available for Bitcoin</p>
+                                <% } %></span>
                                 <span class="font-12 weight-300 white-color-2">+2.5% Dialy</span>
                             </div>
                         </div>

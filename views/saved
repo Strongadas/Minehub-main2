@@ -38,3 +38,68 @@ const startMiningInterval = (userId) => {
     await mineAndCalculateReturns(userId);
   }, 600000); // Adjust the time interval as needed (10 minutes = 600,000 milliseconds)
 };
+
+
+
+
+//reg
+
+// User registration route
+app.post('/register', async (req, res) => {
+  try {
+    const { username, password, name, referralCode } = req.body;
+
+    const newUser = new User({ username, name, referralCode: generateReferralCode() });
+
+    // Register the user using Passport's register method
+    User.register(newUser, password, async (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.redirect('/');
+      } else {
+        try {
+          // Check if there's a referral code in the request
+          if (referralCode) {
+            // Find the user who referred this new user
+            const referrer = await User.findOne({ referralCode });
+            if (referrer) {
+              // Save the referral relationship in the database
+              const referral = new Referral({
+                referrerId: referrer._id,
+                referredId: user._id,
+                rewardStatus: 'pending',
+              });
+              await referral.save();
+
+              console.log('Referral saved:', referral);
+              // Credit the referrer with a balance of 0.0000029
+              referrer.balance += 0.0000029;
+              await referrer.save();
+
+              // Update the referral's reward status to 'success'
+              referral.rewardStatus = 'success';
+              await referral.save();
+
+              // Construct registration link with referral code query parameter
+              const registrationLink = `http://localhost:3000/register?referralCode=${referralCode}`;
+
+              // Copy registration link to clipboard
+              req.flash('success', 'Registration link copied to clipboard!');
+              res.redirect('/dash'); // Redirect to dashboard or any other page
+            }
+          }
+          // Authenticate the user and redirect to the dashboard
+          passport.authenticate('local')(req, res, () => {
+            res.redirect('/dash');
+          });
+        } catch (error) {
+          console.log(error);
+          res.redirect('/');
+        }
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});

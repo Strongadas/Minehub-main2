@@ -1,49 +1,181 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>User Registration</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
-    .container {
-      text-align: center;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      color: #333;
-    }
-    input[type="text"] {
-      width: 300px;
-      padding: 8px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #007bff;
-    }
-    input[type="text"][readonly] {
-      background-color: #f9f9f9;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>User Registration</h1>
-    <p>Share this referral link:</p>
-    <input type="text" value="<%= referralLink %>" readonly>
+<%- include('partials/header-user') %>
+<style>
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+
+  .referral-info {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .referral-code-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .referral-code {
+    font-size: 1.2em;
+    color: #007bff;
+    margin-right: 10px;
+  }
+
+  .copy-button {
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+
+  .copy-button:hover {
+    background-color: #0056b3;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  table, th, td {
+    border: 1px solid #ddd;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+  .registration-link-container {
+    margin-top: 20px;
+}
+
+.registration-link {
+    display: flex;
+    align-items: center;
+}
+
+.registration-link input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.registration-link button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.registration-link button:hover {
+    background-color: #0056b3;
+}
+.icon:hover{
+ cursor: pointer;
+}
+</style>
+
+<div class="container">
+  <h1>My Referrals</h1>
+
+  <div class="referral-info">
+    <div class="referral-code-container">
+      <span class="referral-code"><%= user.referralCode %></span>
+      
+
+      <i class="fas fa-copy icon " onclick="copyReferralCode()" id=""></i>
+    </div>
+    <p>Share your referral code with friends to earn rewards!</p>
+    <div class="registration-link-container">
+     
+      <div class="registration-link-container">
+        <p>Share this link with your friends:</p>
+        <div class="registration-link">
+            <input type="text" id="registrationLink" value="<%= registrationLink %>" readonly>
+            <i class="fas fa-copy icon" onclick="copyRegistrationLink()" id=""></i>
+        </div>
+    </div>
+    
   </div>
-</body>
-</html>
+
+ 
+
+  <div class="total-referred-users">
+    Total Referred Users: <%= totalReferredUsers %>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Referred User</th>
+        <th>Reward Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% referrals.forEach(referral => { %>
+      <tr>
+        <td class=""><%= referral.referredId.username %></td>
+        <td class="text-success"><%= referral.rewardStatus %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function copyReferralCode() {
+    const btnCopy = document.querySelector('.copy-button')
+    const referralCode = document.querySelector('.referral-code').innerText;
+    navigator.clipboard.writeText(referralCode)
+      .then(() => {
+        alert("Referral code copied to clipboard!");
+        
+      })
+      .catch(err => {
+        console.error('Failed to copy referral code: ', err);
+      });
+  }
+
+  function copyRegistrationLink() {
+      const registrationLink = document.getElementById("registrationLink");
+      registrationLink.select();
+      document.execCommand("copy");
+      alert("Registration link copied to clipboard!");
+    }
+</script>
+
+<%- include('partials/footer-user') %>

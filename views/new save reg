@@ -1,0 +1,59 @@
+app.post('/register', async (req, res) => {
+  try {
+    let { username, password, name, referralCode } = req.body;
+
+    // If referralCode is not in the request body, check if it's in the URL query parameters
+    if (!referralCode) {
+      const urlParams = new URLSearchParams(req.url.split('?')[1]);
+      referralCode = urlParams.get('referralCode');
+    }
+
+    console.log('Referral Code:', referralCode); // Add this line to log the referral code
+
+    const newUser = new User({ username, name });
+
+    // Register the user using Passport's register method
+    User.register(newUser, password, async (err, user) => {
+      if (err) {
+        console.log(err);
+        return res.redirect('/');
+      } else {
+        try {
+          // Check if there's a referral code
+          if (referralCode) {
+            // Find the user who referred this new user
+            const referrer = await User.findOne({ referralCode });
+            if (referrer) {
+              // Save the referral relationship in the database
+              const referral = new Referral({
+                referrerId: referrer._id,
+                referredId: user._id,
+                rewardStatus: 'pending',
+              });
+              await referral.save();
+
+              console.log('Referral saved:', referral);
+              // Credit the referrer with a balance of 0.0000029
+              referrer.balance += 0.0000029;
+              await referrer.save();
+
+              // Update the referral's reward status to 'success'
+              referral.rewardStatus = 'success';
+              await referral.save();
+            }
+          }
+          // Authenticate the user and redirect to the dashboard
+          passport.authenticate('local')(req, res, () => {
+            res.redirect('/dash');
+          });
+        } catch (error) {
+          console.log(error);
+          res.redirect('/');
+        }
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/');
+  }
+});
