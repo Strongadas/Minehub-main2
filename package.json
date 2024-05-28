@@ -31,7 +31,8 @@
     "paypal-rest-sdk": "^1.8.1",
     "speakeasy": "^2.0.0",
     "stripe": "^14.25.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "wise-api": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

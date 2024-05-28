@@ -20,7 +20,6 @@ const multer = require('multer');
 const { type } = require('os')
 
 
-
 const PORT = process.env.PORT || 3000
 
 paypal.configure({
@@ -28,6 +27,9 @@ paypal.configure({
   client_id:process.env.PAYPAL_CLIENT_ID ,
   client_secret: process.env.PAYPAL_SECRET,
 })
+
+
+
 
 /*
 paypal.configure({
@@ -41,6 +43,8 @@ const client = new Coinpayments({
   key: process.env.COINPAYMENT_KEY,
   secret: process.env.COINPAYMENT_SECRET,  
 });
+
+
 
 // Set up multer for handling file uploads
 const storage = multer.diskStorage({
@@ -62,6 +66,8 @@ const SECRET_KEY = process.env.STRIPE_SECRET_KEY
 //const SECRET_KEY = "sk_test_51Nv1LICzBZHxsYa2sTmO3PAdIV3I1CZGezIwpS3BM3aXGZoeZKdPmgHLksQvXpKeZ0VBMC6Af4lMK4qHI8zkm1TO00pavdmEyM"
 const stripe  = require('stripe')(SECRET_KEY)
 */
+
+
 
 const app = express()
 
@@ -446,19 +452,18 @@ app.post('/admin/edit/:id', isAdmin, async (req, res) => {
 });
 
 
-  app.get('/login',(req,res)=>{
+ app.get('/login',(req,res)=>{
     const errorMessage = req.flash('error')[0];
     const message = "please verify"
     res.render('login',{errorMessage,message})
   })
-
-  app.get('/register',(req,res)=>{
+ app.get('/register',(req,res)=>{
     res.render('register')
   })
-  app.get('/forgot-password', (req, res) => {
+app.get('/forgot-password', (req, res) => {
     res.render('forgot-password'); 
   });
-  app.get('/reset/:token', (req, res) => {
+app.get('/reset/:token', (req, res) => {
     const token = req.params.token;
   
     // Find user by the reset token and check if it's still valid
@@ -477,6 +482,24 @@ app.post('/admin/edit/:id', isAdmin, async (req, res) => {
 app.get('/calculator',(req,res)=>{
   res.render('calculator')
 })
+
+
+
+
+app.post('/wise', ensureAuthenticated, async (req, res) => {
+  let amount = parseFloat(req.body.amount);
+  let hashrateAmount = parseFloat(req.body.hashrateAmount);
+  const user = req.user;
+  const userEmail = user.username
+  const currency = 'USDT';
+
+  
+  console.log(amount , typeof amount)
+  console.log(hashrateAmount, typeof hashrateAmount)
+
+  res.render('wise',{amount})
+});
+
 
 
 
