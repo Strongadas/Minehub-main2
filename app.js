@@ -593,7 +593,7 @@ const startMiningInterval = (userId) => {
 
 
 
-app.get('/dash', async (req, res, next) => {
+app.get('/dash', ensureAuthenticated,async (req, res, next) => {
   const user = req.user;
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
