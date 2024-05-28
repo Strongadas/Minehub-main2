@@ -591,15 +591,7 @@ const startMiningInterval = (userId) => {
   }, 600000); // Delay the initial call by 10 minutes
 };
 
-async function getBTCtoUSDRate() {
-  try {
-    const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
-    return response.data.bitcoin.usd;
-  } catch (error) {
-    console.error('Error fetching BTC to USD rate:', error);
-    throw error;
-  }
-}
+
 
 app.get('/dash', async (req, res, next) => {
   const user = req.user;
@@ -617,8 +609,7 @@ app.get('/dash', async (req, res, next) => {
   }
 
   try {
-    const cryptoData = await getCryptoPrices(); // Assuming this function fetches crypto prices
-    const btcToUsdRate = await getBTCtoUSDRate(); // Fetch BTC to USD conversion rate
+    
 
     // Fetch recent transactions from the database
     const recentTransactions = await Transaction.find({ userId: req.user._id })
@@ -634,11 +625,10 @@ app.get('/dash', async (req, res, next) => {
 
     // Render the dash view with initial data
     res.render('dash', {
-      cryptoData,
       user: req.user,
       recentTransactions,
       updatedBalance,
-      balanceInUsd,
+    
     });
 
     startMiningInterval(userId);
@@ -680,7 +670,7 @@ const user = req.user
     const updatedBalance = updatedUser.balance;
 
     // Render the dash view with initial data
-    res.render('dash', { cryptoData, user: req.user, recentTransactions, updatedBalance });
+    res.render('dash' user: req.user, recentTransactions, updatedBalance });
 
     startMiningInterval(userId);
   } catch (error) {
@@ -704,27 +694,15 @@ app.get('/withdraw', ensureAuthenticated, async (req, res) => {
   const user = req.user;
 
   try {
-    // Fetch BTC to USD conversion rate
-    const btcToUsdRate = await getBTCtoUSDRate();
-
-    // Minimum withdrawal amount in BTC
-    const minWithdrawalAmountBTC = 0.00019948;
-
-    // Calculate the minimum withdrawal amount in USD
-    const minWithdrawalAmountUSD = minWithdrawalAmountBTC * btcToUsdRate;
-
-    // Fetch updated user data
-    const updatedUser = await User.findById(user._id);
-    const updatedBalance = updatedUser.balance;
-
+    
     // Check if user's balance is less than the minimum withdrawal amount
-    if (updatedBalance < minWithdrawalAmountBTC) {
+    if (updatedBalance < 0.00019948) {
       // If user's balance is insufficient, render error message
       return res.render('withdraw', { user, errorMessage: 'Insufficient balance for withdrawal' });
     }
 
     // If user's balance is sufficient, render withdrawal page
-    res.render('withdraw', { user, minWithdrawalAmountUSD });
+    res.render('withdraw', { user });
   } catch (error) {
     console.error('Error occurred while fetching data:', error);
     res.status(500).send('Error fetching data');
