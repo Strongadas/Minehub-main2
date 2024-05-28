@@ -459,7 +459,7 @@ app.get('/referrals', ensureAuthenticated, async (req, res) => {
     const referralCode = req.user.referralCode; // Assuming referralCode is a property of the user object
 
     // Construct registration link with referral code query parameter
-    const registrationLink = `http://localhost:${PORT}/register?referralCode=${referralCode}`;
+    const registrationLink = `https://minehub.onrender.com/register?referralCode=${referralCode}`;
 
     // Fetch referrals for the logged-in user
     const referrals = await Referral.find({ referrerId: req.user._id }).populate('referredId');
