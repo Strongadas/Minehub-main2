@@ -592,7 +592,7 @@ const startMiningInterval = (userId) => {
 };
 
 
-
+/*
 app.get('/dash', ensureAuthenticated,async (req, res, next) => {
   const user = req.user;
   if (!req.isAuthenticated()) {
@@ -636,27 +636,27 @@ app.get('/dash', ensureAuthenticated,async (req, res, next) => {
     res.status(500).send('Error fetching data');
   }
 });
+*/
 
 
-/*
 app.get('/dash', async (req, res, next) => {
-  
+  const user = req.user;
 
-const user = req.user
   if (!req.isAuthenticated()) {
     return res.redirect('/login');
   }
-  const userId = user.id
+  
+  const userId = user.id;
 
   if (req.user && req.user.twoFactorAuthEnabled && !req.user.twoFactorAuthCompleted) {
     return res.render('twoFactorVerification', { message: "please verify" });
   }
 
-  if(user.despositedBtc){
-    console.log(user.despositedBtc,"user has deposit")
+  if (user.despositedBtc) {
+    console.log(user.despositedBtc, "user has deposit");
   }
+
   try {
-    
     const cryptoData = await getCryptoPrices(); // Assuming this function fetches crypto prices
 
     // Fetch recent transactions from the database
@@ -669,7 +669,7 @@ const user = req.user
     const updatedBalance = updatedUser.balance;
 
     // Render the dash view with initial data
-    res.render('dash' user: req.user, recentTransactions, updatedBalance });
+    res.render('dash', { user: req.user, recentTransactions, updatedBalance, cryptoData });
 
     startMiningInterval(userId);
   } catch (error) {
@@ -677,7 +677,10 @@ const user = req.user
     res.status(500).send('Error fetching data');
   }
 });
-*/
+
+
+
+
 app.get('/transactions',ensureAuthenticated,async(req,res)=>{
   const user = req.user
   // Fetch recent transactions from the database, assuming Transaction is your model
@@ -689,24 +692,10 @@ app.get('/transactions',ensureAuthenticated,async(req,res)=>{
   res.render('transaction-history',{user,recentTransactions})
 })
 
-app.get('/withdraw', ensureAuthenticated, async (req, res) => {
-  const user = req.user;
-
-  try {
-    
-    // Check if user's balance is less than the minimum withdrawal amount
-    if (updatedBalance < 0.00019948) {
-      // If user's balance is insufficient, render error message
-      return res.render('withdraw', { user, errorMessage: 'Insufficient balance for withdrawal' });
-    }
-
-    // If user's balance is sufficient, render withdrawal page
-    res.render('withdraw', { user });
-  } catch (error) {
-    console.error('Error occurred while fetching data:', error);
-    res.status(500).send('Error fetching data');
-  }
-});
+app.get('/withdraw',ensureAuthenticated,(req,res)=>{
+  const user = req.user
+  res.render('withdraw',{user})
+})
 
 
 
