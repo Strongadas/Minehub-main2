@@ -620,8 +620,7 @@ app.get('/dash', async (req, res, next) => {
     const updatedUser = await User.findById(req.user._id);
     const updatedBalance = updatedUser.balance;
 
-    // Calculate the user's balance in USD
-    const balanceInUsd = updatedBalance * btcToUsdRate;
+    
 
     // Render the dash view with initial data
     res.render('dash', {
