@@ -3,7 +3,6 @@ const express = require('express')
 const ejs = require('ejs')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const axios = require('axios');
 const session = require('express-session')
 const passportLocalMongoose = require('passport-local-mongoose')
 const passport = require('passport')
@@ -18,6 +17,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const multer = require('multer'); 
 const { type } = require('os')
+const axios = require('axios')
 
 
 const PORT = process.env.PORT || 4000
@@ -57,13 +57,12 @@ const storage = multer.diskStorage({
 const upload = multer({ dest: 'uploads/' });
 
 //stripe api credentials
-/*
+
 const PUBLISHABLE_KEY = process.env.STRIPE_PUBLISH_KEY
 const SECRET_KEY = process.env.STRIPE_SECRET_KEY
 //const PUBLISHABLE_KEY = "pk_test_51Nv1LICzBZHxsYa2cLrtr1GvgwdeUBHbZU8zRyOyx0li7nnCod7zLOGxWnfKznCfSqsZRZ8kPyOycZMOafhzsdjV00I1GM2POK"
 //const SECRET_KEY = "sk_test_51Nv1LICzBZHxsYa2sTmO3PAdIV3I1CZGezIwpS3BM3aXGZoeZKdPmgHLksQvXpKeZ0VBMC6Af4lMK4qHI8zkm1TO00pavdmEyM"
 const stripe  = require('stripe')(SECRET_KEY)
-*/
 
 
 
@@ -951,16 +950,21 @@ app.get('/payment_success', ensureAuthenticated, async (req, res) => {
                 to: user.username,
                 subject: 'Deposit Confirmation',
                 html: `
-                  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #007bff;">Deposit Confirmation</h2>
-                    <p>Hello ${user.username},</p>
-                    <p>Your deposit for ${hashrateAmount}TH has been processed.</p>
-                    <p>If you have any questions or concerns, please contact our support team.</p>
-                    <p>Paid Amount: ${amount}</p>
-                    <p style="font-weight: bold;">Thank you Minehub.</p>
-                  </div>
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+                        <h2 style="color: #007bff;">Deposit Confirmation</h2>
+                        <p>Hello ${user.username},</p>
+                        <p>Your deposit for ${hashrateAmount}TH has been processed.</p>
+                        <p>If you have any questions or concerns, please contact our support team.</p>
+                        <p>Paid Amount: ${amount}</p>
+                        <p style="font-weight: bold;">Thank you, Minehub.</p>
+                        <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+                        <div style="text-align: center; margin-top: 20px;">
+                            <img src="/images/log.png" alt="Minehub Logo" style="max-width: 100px; height: auto;">
+                        </div>
+                    </div>
                 `,
-              });
+            });
+            
 
               // Render the success page with the updated balance
               res.render("success",{payerId,paymentId,user ,amount, hashrateAmount});
@@ -1487,7 +1491,7 @@ app.post('/bitcoin', ensureAuthenticated, (req, res) => {
 
 //stripe payment
 
-/*
+
 let due;
 let amountInCents;
 app.post('/visa',ensureAuthenticated,(req,res)=>{
@@ -1512,6 +1516,7 @@ app.post('/visa',ensureAuthenticated,(req,res)=>{
 
     res.render('visa',{user ,key:PUBLISHABLE_KEY, due,amountInCents,hashrateAmount})
   })
+
 app.get('/visa', ensureAuthenticated, async(req, res) => {
 
   
@@ -1585,7 +1590,6 @@ app.get('/visa', ensureAuthenticated, async(req, res) => {
 
                 console.log('despositedAmount',user.despositedAmount)
 
-                const axios = require('axios');
 
                 async function convertUSDtoBTC(amountInUSD) {
                   try {
@@ -1703,7 +1707,7 @@ app.get('/visa', ensureAuthenticated, async(req, res) => {
         });
     });
 });
-*/
+
 
 // POST route to handle form submission and update user settings
 app.post('/update-settings', async (req, res) => {

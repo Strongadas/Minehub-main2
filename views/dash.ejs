@@ -84,7 +84,7 @@
                     <div class="p-4 pt-4 d-flex flex-column purple-bg-color round-corner">
                         <!-- Your HTML structure -->
                         <span class="text-uppercase font-10 weight-600 white-color-2">Balance Details</span>
-                        <span class="font-28 weight-700 white-color mt-4">BTC <%= updatedBalance.toFixed(8) %></span>
+                        <span class="font-28 weight-700 white-color mt-4" id="btcBalance">BTC <%= updatedBalance.toFixed(8) %></span>
 
                 
                         <span class="font-12 weight-300 white-color-2"> 
@@ -102,18 +102,20 @@
                           
                         <div class="d-flex flex-row justify-content-between mt-4">
                             <div class="d-flex flex-column">
-                                <span class="font-16 weight-600 white-color" id="countdown">
-                                    :10:00
-                                    
+                                <p class="font-16 weight-600 white-color"><strong>USD</strong> $<span id="usdEquivalent" class="font-16 weight-600 white-color"></span></p>
+                                
+                                <span class="font-12 weight-500 white-color-2"  > 
+                                    <% if (cryptoData && cryptoData.USD) { %>
+                                        <data class="card-value" value="<%= cryptoData.USD %>" >1BTC=$ <%= cryptoData.USD.toFixed(1) %></data>
+                                    <% } else { %>
+                                        <p>No USD value available for Bitcoin</p>
+                                    <% } %>    
                                 </span>
-                                <span class="font-12 weight-500 white-color-2" > Earn up to </span>
                             </div>
                             <div class="d-flex flex-column">
-                                <span class="font-16 weight-600 white-color">1 BTC / <% if (cryptoData && cryptoData.USD) { %>
-                                    <data class="card-value" value="<%= cryptoData.USD %>">USD <%= cryptoData.USD.toFixed(1) %></data>
-                                <% } else { %>
-                                    <p>No USD value available for Bitcoin</p>
-                                <% } %></span>
+                                <span class="font-16 weight-600 white-color"  id="countdown"> 
+                                    :10:00
+                                </span>
                                 <span class="font-12 weight-300 white-color-2">+2.5% Dialy</span>
                             </div>
                         </div>
@@ -296,4 +298,34 @@ crossorigin="anonymous"></script>
     updateCountdown(); // Initial call to set the correct time immediately
 });
 
+
+async function fetchBtcToUsdRate() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const data = await response.json();
+        return data.bitcoin.usd;
+      } catch (error) {
+        console.error('Error fetching BTC to USD exchange rate:', error);
+        return null;
+      }
+    }
+
+    async function convertBtcToUsd() {
+      const btcBalanceElement = document.getElementById('btcBalance');
+      const usdEquivalentElement = document.getElementById('usdEquivalent');
+      const btcBalance = parseFloat(btcBalanceElement.textContent);
+      const btcToUsdRate = await fetchBtcToUsdRate();
+
+      if (btcToUsdRate) {
+        const usdEquivalent = btcBalance * btcToUsdRate;
+        usdEquivalentElement.textContent = usdEquivalent.toFixed(2);
+      } else {
+        usdEquivalentElement.textContent = 'Error fetching rate';
+      }
+    }
+
+    // Assuming updatedBalance is provided by your server-side templating engine
+    const updatedBalance = <%= updatedBalance %>;
+    document.getElementById('btcBalance').textContent = updatedBalance.toFixed(8);
+    convertBtcToUsd();
     </script>

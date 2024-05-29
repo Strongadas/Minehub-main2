@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>USDT Payment Address</title>
+  <title>BTC Payment Address</title>
   <!-- Include Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -14,15 +14,15 @@
       <div class="card-body">
         <p><strong>Address:</strong> 19fM2WZExQwmMtPGUxdyKRW13BBAwAwN1x </p>
         <p><strong>Amount:</strong> $<%= amount %></p>
+        <p><strong>Amount in BTC:</strong> <span id="btcAmount"></span></p>
         <p><strong>Network:</strong> BITCOIN</p>
 
-        <center><img src="/images/btcqrcode.jpg" alt="" width="250px" height="250px"></center>
+        <center><img src="/images/btcqrcode.jpg" alt="BTC QR Code" width="250px" height="250px"></center>
 
         <br><br>
        
         <label class="text-muted">It may take up to 24 hours or less due to the blockchain, mostly 30 min. Feel free to contact our team.</label>
 
-       
         <div id="proofSubmissionForm">
           <!-- Form for submitting proof of payment -->
           <form action="/submitProof" method="post" enctype="multipart/form-data">
@@ -41,19 +41,32 @@
             <button type="submit" class="btn btn-success">Submit</button>
           </form>
         </div>
-
-        
       </div>
-
     </div> <br>
     <div class="text-center">
       <a href="/dash" class="btn btn-primary">Go to Dashboard</a>
     </div>
   </div>
 
-  
-
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/umd/qrcode.js"></script>
-  
+  <script>
+    // Function to fetch the current BTC to USD exchange rate and convert the amount
+    async function convertUsdToBtc(amountInUsd) {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+        const data = await response.json();
+        const btcToUsdRate = data.bitcoin.usd;
+        const amountInBtc = amountInUsd / btcToUsdRate;
+        document.getElementById('btcAmount').textContent = amountInBtc.toFixed(8) + ' BTC';
+      } catch (error) {
+        console.error('Error fetching BTC to USD exchange rate:', error);
+        document.getElementById('btcAmount').textContent = 'Error fetching rate';
+      }
+    }
+
+    // Assuming you pass the amount as a variable in the template rendering
+    const amountInUsd = <%= amount %>;
+    convertUsdToBtc(amountInUsd);
+  </script>
 </body>
 </html>
